@@ -25,7 +25,8 @@ export default function Page() {
         dispatch(setUser(user))
         router.push('/home')
       }else{
-        Telegram.WebApp.showAlert(JSON.stringify(user))
+        // Telegram.WebApp.showAlert(JSON.stringify(user))
+        alert(user)
       }
     }
     
