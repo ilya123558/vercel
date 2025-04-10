@@ -20,10 +20,15 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    if(user && isSuccess) {
-      dispatch(setUser(user))
-      router.push('/home')
+    if(user) {
+      if(isSuccess) {
+        dispatch(setUser(user))
+        router.push('/home')
+      }else{
+        Telegram.WebApp.showAlert(JSON.stringify(user))
+      }
     }
+    
   }, [user, isSuccess])
 
   return (
