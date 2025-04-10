@@ -25,7 +25,7 @@ export default function Page() {
       router.push('/home')
     }
     if (isError) {
-      alert(error);
+      alert(JSON.stringify(error));
     }
   }, [user, isSuccess, isError, error]);
 
