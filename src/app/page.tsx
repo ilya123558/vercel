@@ -15,14 +15,12 @@ export default function Page() {
     try {
       const launchParams = retrieveLaunchParams();
   
-      // Проверка на наличие параметров и данных пользователя
       if (launchParams?.tgWebAppData?.user) {
         const data_init = JSON.stringify(launchParams.tgWebAppData.user);
   
-        // Если данные присутствуют, выполняем запрос
         if (data_init) {
           loginByInitData({ data_init })
-            .unwrap()  // Если используешь RTK Query с unwrap для получения данных напрямую
+            .unwrap()
             .then((response) => {
               console.log("User data successfully sent:", response);
             })
