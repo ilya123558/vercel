@@ -9,7 +9,7 @@ import { setUser, useAppDispatch } from "@/views/store";
 export default function Page() {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const [ loginByInitData, {data: user, isSuccess} ] = useLoginByInitDataMutation()
+  const [ loginByInitData, {data: user, isSuccess, isError, error} ] = useLoginByInitDataMutation()
 
   useEffect(() => {
     const launchParams = retrieveLaunchParams();
@@ -20,17 +20,14 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    if(user) {
-      if(isSuccess) {
-        dispatch(setUser(user))
-        router.push('/home')
-      }else{
-        // Telegram.WebApp.showAlert(JSON.stringify(user))
-        alert(user)
-      }
+    if (user && isSuccess) {
+      dispatch(setUser(user))
+      router.push('/home')
     }
-    
-  }, [user, isSuccess])
+    if (isError) {
+      alert(error);
+    }
+  }, [user, isSuccess, isError, error]);
 
   return (
     <section className="flex items-center justify-center h-full">
