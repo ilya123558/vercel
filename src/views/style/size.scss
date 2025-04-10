@@ -1,0 +1,95 @@
+$--vw-to-px: 0.267;
+$--vh-to-px: 0.1232;
+
+// font-size
+@for $i from 1 through 100 {
+  .fs-#{$i} {
+    font-size: #{$--vw-to-px * $i}vw;
+  }
+}
+
+@for $i from 1 through 100 {
+  .fs-#{$i}-w {
+    font-size: #{$--vw-to-px * $i}vw;
+  }
+}
+
+@for $i from 1 through 100 {
+  .fs-#{$i}-h {
+    font-size: #{$--vh-to-px * $i}vh;
+  }
+}
+
+
+// width
+@for $i from 1 through 1000 {
+  .w-#{$i}px {
+    width: #{$--vw-to-px * $i}vw;
+  }
+}
+
+@for $i from 1 through 1000 {
+  .h-#{$i}px {
+    height: #{$--vw-to-px * $i}vw;
+  }
+}
+
+
+// min-w
+@for $i from 1 through 1000 {
+  .min-w-#{$i}px {
+    min-width: #{$--vw-to-px * $i}vw;
+  }
+}
+
+@for $i from 1 through 1000 {
+  .min-h-#{$i}px {
+    min-height: #{$--vw-to-px * $i}vw;
+  }
+}
+
+
+// max-w
+@for $i from 1 through 1000 {
+  .max-w-#{$i}px {
+    max-width: #{$--vw-to-px * $i}vw;
+  }
+}
+
+@for $i from 1 through 1000 {
+  .max-h-#{$i}px {
+    max-height: #{$--vw-to-px * $i}vw;
+  }
+}
+
+
+// top
+@for $i from 1 through 100 {
+  .top-#{$i}px {
+    top: #{$--vw-to-px * $i}vw;
+  }
+}
+
+
+// bottom
+@for $i from 1 through 100 {
+  .bottom-#{$i}px {
+    bottom: #{$--vw-to-px * $i}vw;
+  }
+}
+
+
+// left
+@for $i from 1 through 100 {
+  .left-#{$i}px {
+    left: #{$--vw-to-px * $i}vw;
+  }
+}
+
+
+// right
+@for $i from 1 through 100 {
+  .right-#{$i}px {
+    right: #{$--vw-to-px * $i}vw;
+  }
+}
