@@ -14,7 +14,7 @@ export default function Page() {
   useEffect(() => {
     try {
       const launchParams = retrieveLaunchParams();
-  
+      alert('launchParams')
       if (launchParams?.tgWebAppData?.user) {
         const data_init = JSON.stringify(launchParams.tgWebAppData.user);
   
