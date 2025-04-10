@@ -2,29 +2,30 @@
 import { Loader } from "@/shared/ui/loader/Loader";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-// import { retrieveRawInitData } from '@telegram-apps/bridge';
-
-const allRoutes = [
-  '/upgrade',
-  '/tasks',
-  '/store',
-  '/home',
-  '/profile',
-  '/rating',
-  '/exchange',
-];
+import { retrieveRawInitData } from '@telegram-apps/bridge';
+import { useLoginByInitDataMutation } from "@/entities/users/api/users.api";
+import { setUser, useAppDispatch } from "@/views/store";
 
 export default function Page() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const [ loginByInitData, {data: user, isSuccess} ] = useLoginByInitDataMutation()
+
 
   useEffect(() => {
-    // const prefetchAndRedirect = async () => {
-    //   await Promise.all(allRoutes.map((route) => router.prefetch(route)));
-    //   router.push('/home');
-    // };
+    const data_init = retrieveRawInitData()
 
-    // prefetchAndRedirect();
+    if(data_init) {
+      loginByInitData({data_init})
+    }
   }, []);
+
+  useEffect(() => {
+    if(user && isSuccess) {
+      dispatch(setUser(user))
+      router.push('/home')
+    }
+  }, [user, isSuccess])
 
   return (
     <section className="flex items-center justify-center h-full">

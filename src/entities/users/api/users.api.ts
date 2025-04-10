@@ -22,7 +22,7 @@ export const usersApi = createApi({
     }),
 
     // POST
-    loginByInitData: builder.mutation<IUser, {init_data: string}>({
+    loginByInitData: builder.mutation<IUser, {data_init: string}>({
       query: (body) => ({
         url: '/loginByInitData',
         method: 'POST',

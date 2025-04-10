@@ -1,6 +1,8 @@
+import { IUser } from '@/entities/users/types/users';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface IInitialState {
+  user: IUser | null
   game: {
     gameIsStarted: boolean
     statusGame: 'win' | 'defeat' | null
@@ -10,6 +12,7 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
+  user: null,
   game: {
     gameIsStarted: false,
     statusGame: null,
@@ -22,6 +25,10 @@ const mainSlice = createSlice({
   name: 'mainSlice',
   initialState: initialState,
   reducers: {
+    setUser: (state, action: PayloadAction<IInitialState['user']>) => {
+      state.user = action.payload
+    },
+
     startGame: (state) => {
       state.game.gameIsStarted = true
     },
@@ -40,5 +47,5 @@ const mainSlice = createSlice({
   },
 });
 
-export const { setCoinSide, setCountGame, setStatusGame, startGame, stopGame } = mainSlice.actions;
+export const { setUser, setCoinSide, setCountGame, setStatusGame, startGame, stopGame } = mainSlice.actions;
 export const mainReducer = mainSlice.reducer
