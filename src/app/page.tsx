@@ -9,36 +9,15 @@ import { setUser, useAppDispatch } from "@/views/store";
 export default function Page() {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const [ loginByInitData, {data: user, isSuccess} ] = useLoginByInitDataMutation()
+  const [ loginByInitData, {data: user, isSuccess, isError} ] = useLoginByInitDataMutation()
 
   useEffect(() => {
-    try {
-      const launchParams = retrieveLaunchParams();
-      if (launchParams?.tgWebAppData?.user) {
-
-        const data_init = JSON.stringify(launchParams.tgWebAppData.user);
-        alert(data_init)
-  
-        if (data_init) {
-          loginByInitData({ data_init })
-            .unwrap()
-            .then((response) => {
-              console.log("User data successfully sent:", response);
-            })
-            .catch((error) => {
-              console.error("Error during login:", error);
-            });
-        } else {
-          console.error("User data not found in launchParams.");
-        }
-      } else {
-        console.error("Telegram WebApp data or user not found in launchParams.");
-      }
-    } catch (error) {
-      console.error("Error retrieving launch parameters:", error);
+    const launchParams = retrieveLaunchParams();
+    if (launchParams?.tgWebAppData?.user) {
+      const data_init = JSON.stringify(launchParams.tgWebAppData.user);
+      loginByInitData({ data_init })
     }
   }, []);
-  
 
   useEffect(() => {
     if(user && isSuccess) {
@@ -46,6 +25,12 @@ export default function Page() {
       router.push('/home')
     }
   }, [user, isSuccess])
+
+  useEffect(() => {
+    if(isError) {
+      alert('error')
+    }
+  }, [isError])
 
   return (
     <section className="flex items-center justify-center h-full">
