@@ -9,13 +9,13 @@ import { setUser, useAppDispatch } from "@/views/store";
 export default function Page() {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const [ loginByInitData, {data: user, isSuccess, isError} ] = useLoginByInitDataMutation()
+  const [ loginByInitData, {data: user, isSuccess} ] = useLoginByInitDataMutation()
 
   useEffect(() => {
     const launchParams = retrieveLaunchParams();
     if (launchParams?.tgWebAppData?.user) {
-      const data_init = JSON.stringify(launchParams.tgWebAppData.user);
-      loginByInitData({ data_init })
+      const init_data = JSON.stringify(launchParams.tgWebAppData.user);
+      loginByInitData({ init_data })
     }
   }, []);
 
@@ -25,12 +25,6 @@ export default function Page() {
       router.push('/home')
     }
   }, [user, isSuccess])
-
-  useEffect(() => {
-    if(isError) {
-      alert('error')
-    }
-  }, [isError])
 
   return (
     <section className="flex items-center justify-center h-full">
