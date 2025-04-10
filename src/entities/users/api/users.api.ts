@@ -9,7 +9,7 @@ import { IPageRequest } from '@/entities/general/types/general'
 export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/users`,
+    baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://coin.impulsrent.ru'}/users`,
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
