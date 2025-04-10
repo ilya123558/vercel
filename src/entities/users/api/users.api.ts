@@ -10,6 +10,7 @@ export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/users`,
+    credentials: 'include'
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
