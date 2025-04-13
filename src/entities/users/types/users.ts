@@ -1,5 +1,3 @@
-import { CoinSide, IStatusResponse } from "@/entities/general/types/general"
-
 export interface IUser {
   id: number
   photo: string | null

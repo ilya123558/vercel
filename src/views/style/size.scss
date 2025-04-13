@@ -34,6 +34,17 @@ $--vh-to-px: 0.1232;
   }
 }
 
+@for $i from 1 through 1000 {
+  .w-#{$i}px-h {
+    width: #{$--vh-to-px * $i}vh;
+  }
+}
+
+@for $i from 1 through 1000 {
+  .h-#{$i}px-h {
+    height: #{$--vh-to-px * $i}vh;
+  }
+}
 
 // min-w
 @for $i from 1 through 1000 {
@@ -92,4 +103,37 @@ $--vh-to-px: 0.1232;
   .right-#{$i}px {
     right: #{$--vw-to-px * $i}vw;
   }
+}
+
+
+.blur-10 {
+  filter: blur(10px);
+}
+
+.blur-20 {
+  filter: blur(20px);
+}
+
+.blur-30 {
+  filter: blur(30px);
+}
+
+.blur-40 {
+  filter: blur(40px);
+}
+
+.blur-50 {
+  filter: blur(50px);
+}
+
+.blur-60 {
+  filter: blur(60px);
+}
+
+.blur-70 {
+  filter: blur(70px);
+}
+
+.blur-80 {
+  filter: blur(80px);
 }

@@ -1,8 +1,15 @@
 import { animationImg, animationLeft } from "@/shared/const/animation";
+import { useAppSelector } from "@/views/store";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export const ProfileInfo = () => {
+  const {user} = useAppSelector(state => state.main)
+
+  if(!user) {
+    return <></>
+  }
+
   return (
     <div  className="w-full h-[30vh] flex items-center justify-center">
       <div className="">
@@ -13,10 +20,10 @@ export const ProfileInfo = () => {
             <path d="M133 71C137.971 71 142.059 75.0454 141.43 79.9761C140.046 90.8373 136.162 101.274 130.034 110.445C122.233 122.121 111.144 131.222 98.1705 136.595C85.197 141.969 70.9212 143.375 57.1486 140.636C43.3759 137.896 30.7249 131.134 20.7954 121.205C10.8659 111.275 4.1038 98.6241 1.36424 84.8514C-1.37531 71.0788 0.0307314 56.803 5.40455 43.8295C10.7784 30.8559 19.8786 19.7672 31.5545 11.9657C40.7258 5.8376 51.1627 1.95385 62.0239 0.569629C66.9546 -0.0587706 71 4.02944 71 9V62C71 66.9706 75.0294 71 80 71H133Z" fill="#6F4AE7"/>
           </svg>
           <div>
-            <Image src={'/images/profile/profile-img.png'} alt="profile-img" width={136} height={136} quality={100} className="w-136px h-136px rounded-full" />
+            <Image src={user.photo || ''} alt="profile-img" width={136} height={136} quality={100} className="w-136px h-136px rounded-full" />
           </div>
         </motion.div>
-        <motion.h3 {...animationLeft} className="fs-17 font-bold text-center mt-[2.7vw]">User’s name</motion.h3>
+        <motion.h3 {...animationLeft} className="fs-17 font-bold text-center mt-[2.7vw]">{user.fullName}</motion.h3>
       </div>
     </div>
   );

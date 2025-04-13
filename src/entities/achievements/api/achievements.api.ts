@@ -6,6 +6,13 @@ export const achievementsApi = createApi({
   reducerPath: 'achievementsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/achievements`,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken')
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      return headers
+    },
   }),
   tagTypes: ['Achievements'],
   endpoints: (builder) => ({
@@ -15,4 +22,4 @@ export const achievementsApi = createApi({
   }),
 })
 
-export const {  } = achievementsApi
+export const { useGetAchievementsQuery, useLazyGetAchievementsQuery } = achievementsApi

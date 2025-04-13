@@ -6,6 +6,13 @@ export const upgradesApi = createApi({
   reducerPath: 'upgradesApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/upgrades`,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken')
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      return headers
+    },
   }),
   tagTypes: ['Upgrades'],
   endpoints: (builder) => ({

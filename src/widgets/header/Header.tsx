@@ -1,20 +1,28 @@
 'use client'
+import { IUser } from '@/entities/users/types/users';
 import { animationLeft } from '@/shared/const/animation';
 import { Crystal } from '@/shared/ui/crystal/Crystal';
 import { InfoBlock } from '@/shared/ui/info-block/InfoBlock';
+import { useAppSelector } from '@/views/store';
 import { motion } from 'framer-motion';
 import React, { PropsWithChildren } from 'react';
 
 export const Header = ({children}: PropsWithChildren) => {
+  const { user } = useAppSelector(state => state.main)
+
   const handleBuyСrystals = () => {
-
+    
   }
-
+  
+  if(!user) {
+    return <></>
+  }
+  
   return (
-    <motion.header {...animationLeft} className="mt-[12px] flex flex-col gap-[2.67vw] p-[4vw_4.67vw] bg-gradient-block rounded-[16px] border-b-[1px] border-[#464D6854] will-change-transform">
+    <motion.header {...animationLeft} id='header' className="mt-[6px] flex flex-col gap-[2.67vw] p-[4vw_4.67vw] bg-gradient-block rounded-[16px] border-b-[1px] border-[#464D6854] will-change-transform">
       <div className='flex items-center justify-between'>
         <div className="flex items-center gap-[6px]">
-          <Crystal value={5000} />
+          <Crystal value={user.balance} />
           <button onClick={handleBuyСrystals}>
             <svg className='min-w-19px min-h-18px' width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="9.5" cy="9" r="9" fill="white" fillOpacity="0.2"/>
@@ -23,8 +31,8 @@ export const Header = ({children}: PropsWithChildren) => {
             </svg>
           </button>
         </div>
-        <InfoBlock title='lvl' value={3} />
-        <InfoBlock title='Tasks' value={7} />
+        <InfoBlock title='lvl' value={user.level} />
+        <InfoBlock title='Tasks' value={user.availableTasksCount} />
       </div>
       {children}
     </motion.header>

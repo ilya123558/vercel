@@ -1,15 +1,10 @@
+'use client'
 import Image from "next/image"
 import { Crystal } from "../crystal/Crystal"
+import { ITask } from "@/entities/tasks/types/tasks"
 
-interface IProps {
-  photo: string
-  title: string
-  description: string
-  value: number
-  status: string
-}
-
-export const DailyTasksItem = ({photo, title, description, value, status}: IProps) => {
+export const DailyTasksItem = (props: ITask) => {
+  const { description, title, photo, completed, currentProgress, totalProgress, reward } = props
   const handleClick = () => {}
 
   return (
@@ -21,17 +16,22 @@ export const DailyTasksItem = ({photo, title, description, value, status}: IProp
           <p className="font-medium fs-8 opacity-50">{description}</p>
         </div>
       </div>
-      {status === 'claim' && (
-        <button onClick={handleClick} className="active:scale-95 will-change-transform transition-all bg-gradient-violet w-95px h-27px flex items-center justify-center fs-12 font-medium rounded-[20px]">
-          Получить
-        </button>
-      )}
-      {status === 'pending' && <Crystal value={`+${value}`} reverse />}
-      {status === 'done' && (
-        <div className="w-95px h-27px flex items-center justify-center fs-12 font-medium rounded-[20px] border border-[#6F4AE7]">
-          Выполнен
-        </div>
-      )}
+      {completed 
+        ?(
+          <div className="w-95px h-27px flex items-center justify-center fs-12 font-medium rounded-[20px] border border-[#6F4AE7]">
+            Выполнен
+          </div>
+        )
+        : (
+          currentProgress === totalProgress 
+            ?(
+              <button onClick={handleClick} className="active:scale-95 will-change-transform transition-all bg-gradient-violet w-95px h-27px flex items-center justify-center fs-12 font-medium rounded-[20px]">
+                Получить
+              </button>
+            )
+            : <Crystal value={`+${reward}`} reverse />
+        )
+      }
       
     </li>
   );

@@ -1,21 +1,30 @@
 'use client'
+import { useGetReferralsQuery, useLazyGetReferralsQuery } from "@/entities/users/api/users.api";
+import { IReferralUser } from "@/entities/users/types/users";
 import { ProfileRatingInfo } from "@/features/profile-rating-info/ProfileRatingInfo";
 import { RatingList } from "@/features/rating-list/RatingList";
 import { SelectActiveList } from "@/features/select-active-list/SelectActiveList";
 import { animationImg } from "@/shared/const/animation";
 import { Container } from "@/shared/ui/container/Container";
 import { RatingItem } from "@/shared/ui/rating-item/RatingItem";
+import { useAppSelector } from "@/views/store";
 import { Header } from "@/widgets/header/Header";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
+
+const selectList = [
+  {title: 'Rating #1', value: 'rating 1'},
+  {title: 'Rating #2', value: 'rating 2'},
+  {title: 'Rating #3', value: 'rating 3'},
+]
 export default function Page() {
   const [activeVariant, setActiveVariant] = useState<string>('rating 1')
-  const selectList = [
-    {title: 'Rating #1', value: 'rating 1'},
-    {title: 'Rating #2', value: 'rating 2'},
-    {title: 'Rating #3', value: 'rating 3'},
-  ]
+  const { user } = useAppSelector(state => state.main)
+
+  if(!user) {
+    return <></>
+  }
 
   return (
     <section>
@@ -29,10 +38,10 @@ export default function Page() {
         />
         <motion.div {...animationImg} className="mt-[3vw]">
           <RatingItem 
-            lvl={2}
-            name={'Это Вы'} 
-            photo={'/images/profile/friend-img.png'}
-            position={43453}
+            level={user.level}
+            fullName={user.fullName} 
+            photo={user.photo}
+            id={user.id}
           />
           <div className="w-full bg-gradient-decor h-[1px] mt-[3.3vw] mb-[3.3vw] opacity-50"></div>
         </motion.div>

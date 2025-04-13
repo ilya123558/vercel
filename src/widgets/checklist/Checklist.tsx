@@ -38,7 +38,7 @@ export const Checklist = () => {
   }
 
   return (
-    <motion.div {...animationRight} className="relative w-full overflow-hidden">
+    <motion.div {...animationRight} className="relative z-[11] w-full overflow-hidden">
       <Container>
         <div className="grid grid-cols-4 gap-[2.7vw] mt-[2.67vw]">
           <button onClick={handleTasksClick} className="bg-gradient-block backdrop-blur-[20px] border-[1px] border-[#464D6854] h-70px rounded-[16px] flex items-center justify-center transition-all active:scale-95">

@@ -9,7 +9,10 @@ const nextConfig = {
       @import 'variables.scss';
       @import 'size.scss';
     `,
-  }
+  },
+  images: {
+    domains: ['i.imgur.com'],
+  },
 }
 
 export default nextConfig;

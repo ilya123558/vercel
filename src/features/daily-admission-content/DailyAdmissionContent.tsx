@@ -1,5 +1,6 @@
 'use client'
 import { useClaimDailyRewardQuery, useLazyClaimDailyRewardQuery } from "@/entities/users/api/users.api";
+import { IClaimDailyRewardResponse } from "@/entities/users/types/claimDailyReward";
 import { formatCount } from "@/shared/libs/formatCount";
 import { DefaultBtn } from "@/shared/ui/button/DefaultBtn";
 import { DisableBtn } from "@/shared/ui/button/DisableBtn";
@@ -19,8 +20,7 @@ const boosterList = [
   { day: 7, title: 'Ultra boost' },
 ]
 
-export const DailyAdmissionContent = () => {
-  const [activeDay, setActiveDay] = useState(3)
+export const DailyAdmissionContent = ({day: activeDay, reward}: IClaimDailyRewardResponse) => {
 
   const BtnContent = ({day, count}: {day: number, count: number}) => (
     <div className="flex items-center justify-between p-[0px_5vw]">

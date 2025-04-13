@@ -7,11 +7,11 @@ import { Header } from "@/widgets/header/Header";
 export default function Page() {
   return (
     <section>
-      <Container>
+      {/* <Container>
         <Header />
         <ExchangeWallet />
         <ExchangeContent />
-      </Container>
+      </Container> */}
     </section>
   );
 }

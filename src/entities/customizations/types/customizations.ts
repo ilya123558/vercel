@@ -1,4 +1,4 @@
-import { CustomizationType, IPageResponse, IStatusResponse } from "@/entities/general/types/general";
+import { CustomizationType, IPageRequest, IPageResponse, IStatusResponse } from "@/entities/general/types/general";
 
 export interface ICustomization {
   id: number
@@ -6,12 +6,18 @@ export interface ICustomization {
   title: string
   photo: string
   price: number
+  isActive: boolean,
+  isBought: boolean,
   winstreakBonus?: number
   tossCountBonus?: number
 }
 
 export interface IGetCustomizationsResponse extends IPageResponse {
   customizations: ICustomization[]
+}
+
+export interface IGetCustomizationsRequest extends IPageRequest {
+  type: CustomizationType
 }
 
 export interface IBuyCustomizationRequest {

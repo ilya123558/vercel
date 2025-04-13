@@ -1,22 +1,25 @@
 'use client'
 import { ModalContentWrapper } from '@/shared/ui/wrappers/modal-content-wrapper/ModalContentWrapper';
 import { DailyAdmissionContent } from '../daily-admission-content/DailyAdmissionContent';
-import { useLazyClaimDailyRewardQuery } from '@/entities/users/api/users.api';
+import { IClaimDailyRewardResponse } from '@/entities/users/types/claimDailyReward';
+import { useState } from 'react';
 
-export const DailyAdmissionModal = () => {
-  const [claimDailyReward] = useLazyClaimDailyRewardQuery()
+export const DailyAdmissionModal = (props: IClaimDailyRewardResponse) => {
+  const [isOpen, setIsOpen] = useState(true)
 
   const handleClick = async() => {
-    await claimDailyReward()
+    // забрать дневную награду
+    setIsOpen(false)
   }
 
   return (
     <ModalContentWrapper
       title="Ежедневный вход"
       subTitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      imageComponent={<DailyAdmissionContent />}
+      imageComponent={<DailyAdmissionContent {...props} />}
       onClick={handleClick}
       textButton='Забрать'
+      isOpen={isOpen}
     />
   );
 };

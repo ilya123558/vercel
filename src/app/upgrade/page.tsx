@@ -1,10 +1,19 @@
 'use client'
+import { useLazyGetUpgradesQuery } from "@/entities/upgrades/api/upgrades.api";
 import { UpgradeList } from "@/features/upgrade-list/UpgradeList";
 import { Container } from "@/shared/ui/container/Container";
+import { ListEmpty } from "@/shared/ui/list-empty/ListEmpty";
 import { Title } from "@/shared/ui/title/Title";
 import { Header } from "@/widgets/header/Header";
+import { useEffect } from "react";
 
 export default function Page() {
+  const [getUpgrades, { data }] = useLazyGetUpgradesQuery()
+
+  useEffect(() => {
+    getUpgrades({page: 1, limit: 50})
+  }, [])
+
   return (
     <section>
       <Container>
@@ -15,7 +24,11 @@ export default function Page() {
           </div>
         </Header>
         <Title className="mt-[2.67vw] mb-[2.67vw]">Прокачка</Title>
-        <UpgradeList />
+        {data && (
+          data.upgrades.length !== 0
+            ? <UpgradeList list={data.upgrades} />
+            : <ListEmpty />
+        )}
       </Container>
     </section>
   );

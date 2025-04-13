@@ -13,6 +13,7 @@ const config: Config = {
         "gradient-gray-to-bottom": "linear-gradient(#333341, rgba(44, 44, 65, 0.24))",
         "gradient-block": "linear-gradient(to bottom right, #252531, rgba(24, 24, 38, 0.06))",
         "gradient-default-button": "linear-gradient(to bottom right, #5C317C, rgba(24, 24, 38, 0.06))",
+        "gradient-default-button-bottom": "linear-gradient(#5C317C, rgba(24, 24, 38, 0.06))",
         "gradient-list-item": "linear-gradient(#242430, rgba(44, 44, 65, 0.24))",
         "gradient-decor": "linear-gradient(to right, transparent, #364357, transparent)",
       },

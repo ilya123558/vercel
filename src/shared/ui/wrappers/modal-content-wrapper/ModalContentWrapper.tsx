@@ -13,10 +13,12 @@ interface IProps {
   countValueInButton?: number
   textButton: string
   closeModal?: () => void
+  isOpen?: boolean
+  disableButton?: boolean
 }
 
-export const ModalContentWrapper = ({withCloseBtn, title, subTitle, imageComponent, onClick, countValueInButton, textButton, closeModal}: IProps) => {
-  const [open, setOpen] = useState(true)
+export const ModalContentWrapper = ({ disableButton, isOpen=true, withCloseBtn, title, subTitle, imageComponent, onClick, countValueInButton, textButton, closeModal}: IProps) => {
+  const [open, setOpen] = useState(isOpen)
 
   const handleClose = () => {
     if(closeModal) {
@@ -41,7 +43,7 @@ export const ModalContentWrapper = ({withCloseBtn, title, subTitle, imageCompone
           <p className='fs-10 max-w-190px text-center opacity-[0.5] mt-[7px]'>{subTitle}</p>
           {imageComponent}
         </div>
-        <Button onClick={onClick} countValue={countValueInButton}>{textButton}</Button>
+        {!disableButton && <Button onClick={onClick} countValue={countValueInButton}>{textButton}</Button>}
         {withCloseBtn && <CloseButton onClick={handleClose} />}
       </div>
     </Modal>

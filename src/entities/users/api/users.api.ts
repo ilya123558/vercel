@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IUser } from '../types/users'
-import { ITossRequest } from '../types/toss'
+import { ITossRequest, ITossResponse } from '../types/toss'
 import { IClaimDailyRewardResponse } from '../types/claimDailyReward'
 import { IUpdateEnergyResponse } from '../types/updateEnergy'
 import { IGetReferralsResponse } from '../types/referrals'
@@ -10,7 +10,13 @@ export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/users`,
-    credentials: 'include'
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken')
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      return headers
+    },
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
@@ -21,27 +27,17 @@ export const usersApi = createApi({
     getReferrals: builder.query<IGetReferralsResponse, IPageRequest>({
       query: () => '/referrals',
     }),
-
-    // POST
-    loginByInitData: builder.mutation<IUser, {init_data: any}>({
-      query: (body) => ({
-        url: '/loginByInitData',
-        method: 'POST',
-        body
-      }),
-    }),
-    tossCoin: builder.mutation<IUser, ITossRequest>({
+    tossCoin: builder.mutation<ITossResponse, ITossRequest>({
       query: (body) => ({
         url: '/toss',
         method: 'POST',
         body
       }),
     }),
-    updateEnergy: builder.mutation<IUpdateEnergyResponse, ITossRequest>({
-      query: (body) => ({
+    updateEnergy: builder.mutation<IUpdateEnergyResponse, void>({
+      query: () => ({
         url: '/updateEnergy',
         method: 'POST',
-        body
       }),
     }),
   }),
@@ -52,7 +48,6 @@ export const {
   useGetReferralsQuery, 
   useLazyClaimDailyRewardQuery,
   useLazyGetReferralsQuery,
-  useLoginByInitDataMutation,
   useTossCoinMutation, 
   useUpdateEnergyMutation 
 } = usersApi

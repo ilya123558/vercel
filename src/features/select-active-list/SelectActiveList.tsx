@@ -1,12 +1,13 @@
 'use client'
+import { CustomizationType } from "@/entities/general/types/general";
 import { animationLeft } from "@/shared/const/animation";
 import { BlockWrapper } from "@/shared/ui/wrappers/block-wrapper/BlockWrapper";
 import { motion } from "framer-motion";
 
 interface IProps {
   value: string
-  setValue: (value: string) => void
-  selectList: {title: string, value: string}[]
+  setValue: (value: any) => void
+  selectList: {title: string, value: any}[]
 }
 
 export const SelectActiveList = ({ value, setValue, selectList }: IProps) => {

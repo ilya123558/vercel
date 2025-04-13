@@ -73,7 +73,7 @@ export const ModalImage = ({photo, variantBackground}: IProps) => {
           </svg>
         )
       }
-      <Image src={photo} alt='modal-img' width={130} height={130} quality={100} className='absolute h-130px w-130px'/>
+      <Image src={photo} alt='modal-img' width={200} height={200} quality={100} className='absolute h-130px w-130px' priority />
     </div>
   );
 };

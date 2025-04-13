@@ -1,16 +1,18 @@
 'use client'
 import { InfoBlock } from '@/shared/ui/info-block/InfoBlock';
+import { useAppSelector } from '@/views/store';
 
 export const GameInfo = () => {
-  const enegryProcent = 98
+  const { user } = useAppSelector(state => state.main)
 
-  const throwValue = 10
-  const throwTotal = 32
+  if(!user) {
+    return <></>
+  }
 
   return (
     <div className='flex items-center justify-between'>
-      <InfoBlock title='Enegry:' value={`${enegryProcent}%`}/>
-      <InfoBlock title='Броски:' value={`${throwValue}/${throwTotal}`}/>
+      <InfoBlock title='Enegry:' value={`${user.energyPercent}%`}/>
+      <InfoBlock title='Броски:' value={`${user.tossCount}/${user.maxTossCount}`}/>
     </div>
   );
 };
