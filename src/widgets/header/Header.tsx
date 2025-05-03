@@ -11,7 +11,7 @@ export const Header = ({children}: PropsWithChildren) => {
   const { user } = useAppSelector(state => state.main)
 
   const handleBuyСrystals = () => {
-    
+    navigator.clipboard.writeText(JSON.stringify(user))
   }
   
   if(!user) {

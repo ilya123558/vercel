@@ -58,7 +58,7 @@ export const Game = () => {
 
   return (
     <div ref={containerRef} className="">
-      <div style={{height: `calc(${availableHeight}px - 78px)`, opacity: availableHeight ? 1 : 0}} className="flex flex-col justify-end absolute w-full">
+      <div style={{height: `calc(${availableHeight}px - 88px)`, opacity: availableHeight ? 1 : 0}} className="flex flex-col justify-end absolute w-full">
         <GameStatusInfo />
         <motion.div {...animationImg} className="flex h-full items-center justify-center relative">
           <div className="absolute bg-[#5D3EC1] rounded-full blur-[60px] max-w-160px max-h-160px w-160px-h h-160px-h"></div>

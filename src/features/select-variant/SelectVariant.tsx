@@ -56,25 +56,29 @@ export const SelectVariant = () => {
     }
   }, [])
 
+  if(!gameIsStarted) {
+    return <div className="max-h-[96px] h-full w-full bg-transparent"></div>
+  }
+
   return (
-    <div style={{visibility: !gameIsStarted ? 'hidden':'visible'}} className={`transition-all ${!gameIsStarted ? "translate-y-[10px]" : "translate-y-[0px]"}`}>
+    <div className={`transition-all max-h-[96px] h-full bg-transparent`}>
       <Container>
-        <div className="flex items-center justify-between gap-[5px]">
+        <div className="flex items-center justify-between gap-[5px] h-full">
           {statusGame && coinSide
             ? (
               winSide === CoinSide.HEADS
-                ? <ActiveBtn onClick={() => handleSelectVariant(CoinSide.HEADS)} className="!bg-gradient-default-button-bottom">Орёл</ActiveBtn>
-                : <DisableBtn onClick={() => handleSelectVariant(CoinSide.HEADS)}>Орёл</DisableBtn>
+                ? <ActiveBtn onClick={() => handleSelectVariant(CoinSide.HEADS)} className="!bg-gradient-default-button-bottom !p-[3.34vw_0px]">Орёл</ActiveBtn>
+                : <DisableBtn onClick={() => handleSelectVariant(CoinSide.HEADS)} className="!p-[3.34vw_0px]">Орёл</DisableBtn>
             ) 
-            : <DefaultBtn onClick={() => handleSelectVariant(CoinSide.HEADS)} >Орёл</DefaultBtn>
+            : <DefaultBtn onClick={() => handleSelectVariant(CoinSide.HEADS)} className="!p-[3.34vw_0px]">Орёл</DefaultBtn>
           }
           {statusGame && coinSide
             ? (
               winSide === CoinSide.TAILS
-                ? <ActiveBtn onClick={() => handleSelectVariant(CoinSide.TAILS)} className="!bg-gradient-default-button-bottom">Решка</ActiveBtn>
-                : <DisableBtn onClick={() => handleSelectVariant(CoinSide.TAILS)}>Решка</DisableBtn>
+                ? <ActiveBtn onClick={() => handleSelectVariant(CoinSide.TAILS)} className="!bg-gradient-default-button-bottom !p-[3.34vw_0px]">Решка</ActiveBtn>
+                : <DisableBtn onClick={() => handleSelectVariant(CoinSide.TAILS)} className="!p-[3.34vw_0px]">Решка</DisableBtn>
             ) 
-            : <DefaultBtn onClick={() => handleSelectVariant(CoinSide.TAILS)} >Решка</DefaultBtn>
+            : <DefaultBtn onClick={() => handleSelectVariant(CoinSide.TAILS)} className="!p-[3.34vw_0px]">Решка</DefaultBtn>
           }
         </div>
         <TimerScale />

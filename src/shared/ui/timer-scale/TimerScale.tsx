@@ -37,8 +37,8 @@ export const TimerScale = () => {
   }, [remainingTime, gameIsStarted, statusGame]);
 
   return (
-    <div className="mt-[2vw]">
-      <div className="flex items-center justify-between mb-[2vw]">
+    <div className="mt-[9px]">
+      <div className="flex items-center justify-between mb-[4px]">
         <div className="flex items-center">
           <p className="fs-14 font-bold opacity-[0.5]">Game:</p>
           <p className="fs-17 font-bold ml-[4px]">#{countGame}</p>
