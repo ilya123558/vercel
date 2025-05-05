@@ -18,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <script src="https://telegram.org/js/telegram-web-app.js" async></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <script src="https://telegram.org/js/telegram-web-app.js?57" async></script>
       </Head>
       <body className="mt-[70px]">
         <ProviderWrapper>
