@@ -3,13 +3,19 @@ import { store } from "@/views/store";
 import { PropsWithChildren, useEffect } from "react";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from 'notistack';
-import { viewport } from '@telegram-apps/sdk';
 
 export const ProviderWrapper = ({children}: PropsWithChildren) => {
   useEffect(() => {
-    if (viewport.expand.isAvailable()) {
-      viewport.expand();
-    }
+    const checkTelegramWebApp = setInterval(() => {
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        // @ts-ignore
+        tg.requestFullscreen();
+        clearInterval(checkTelegramWebApp);
+      }
+    }, 100);
+  
+    return () => clearInterval(checkTelegramWebApp);
   }, []);
 
   return (
