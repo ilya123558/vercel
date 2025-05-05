@@ -1,3 +1,4 @@
+'use client'
 import { CoinSide } from '@/entities/general/types/general'
 import { useGame } from '@/shared/hooks/useGame'
 import { setIsChoiceVisible, setIsCompleted, setIsStarted, useAppDispatch, useAppSelector } from '@/views/store'
