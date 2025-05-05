@@ -1,5 +1,4 @@
 'use client'
-
 import { GameInfo } from "@/features/game-info/GameInfo";
 import { Container } from "@/shared/ui/container/Container";
 import { Checklist } from "@/widgets/checklist/Checklist";
