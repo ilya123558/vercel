@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ModalImage } from '@/shared/ui/modal-image/ModalImage';
 
 export const DailyAdmissionModalWheel = () => {
+  const [isOpen, setIsOpen] = useState(false)
   const [spin, setSpin] = useState(false)
   const [isSpined, setIsSpined] = useState(false)
 
@@ -17,6 +18,8 @@ export const DailyAdmissionModalWheel = () => {
       {isSpined
         ? (
           <ModalContentWrapper
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
             title="Название награды"
             subTitle=""
             imageComponent={<ModalImage photo='/images/modal/zip.png' />}
@@ -26,6 +29,8 @@ export const DailyAdmissionModalWheel = () => {
         )
         : (
           <ModalContentWrapper
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
             title="Ежедневный вход"
             subTitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
             imageComponent={<DailyAdmissionModalWheelContent spin={spin} setIsSpined={setIsSpined} />}
