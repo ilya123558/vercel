@@ -140,7 +140,7 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 	)
 }
 
-export const CoinAnimation: React.FC<{ animationData: any }> = ({
+const CoinAnimation: React.FC<{ animationData: any }> = ({
 	animationData,
 }) => {
 	const handleAnimationComplete = () => {
@@ -154,3 +154,5 @@ export const CoinAnimation: React.FC<{ animationData: any }> = ({
 		/>
 	)
 }
+
+export default CoinAnimation
