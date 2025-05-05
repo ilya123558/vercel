@@ -59,10 +59,10 @@ const mainSlice = createSlice({
   initialState: initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IInitialState["user"]>) => {
-      const newUserValue = action.payload
-      newUserValue?.tossCount === 100
-      
-      state.user = newUserValue
+      state.user = action.payload
+      if(state.user) {
+        state.user.tossCount = 100
+      }
     },
 
     setEnergyPercent: (state, action: PayloadAction<number>) => {
