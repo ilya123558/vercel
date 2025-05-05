@@ -19,7 +19,7 @@ export const AutoBot = () => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
+    document?.addEventListener('click', handleClickOutside);
 
     return () => {
       document.removeEventListener('click', handleClickOutside);

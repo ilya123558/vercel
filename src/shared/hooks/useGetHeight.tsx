@@ -12,7 +12,7 @@ export const useGetHeight = ({ containerRef, withoutMenu }: IProps) => {
   const calculateHeights = useCallback(() => {
     const screenHeight = window.visualViewport?.height || window.innerHeight
 
-    const menu = document.getElementById("menu")
+    const menu = document?.getElementById("menu")
     const menuHeight = menu && !withoutMenu ? menu.offsetHeight : 0
     setMenuHeightValue(menuHeight)
 

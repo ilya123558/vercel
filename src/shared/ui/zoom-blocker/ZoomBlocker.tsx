@@ -14,8 +14,8 @@ export const ZoomBlocker = () => {
       e.preventDefault()
     }
 
-    document.addEventListener("touchmove", preventPinchZoom, { passive: false })
-    document.addEventListener("gesturestart", preventGesture, { passive: false })
+    document?.addEventListener("touchmove", preventPinchZoom, { passive: false })
+    document?.addEventListener("gesturestart", preventGesture, { passive: false })
 
     return () => {
       document.removeEventListener("touchmove", preventPinchZoom)
