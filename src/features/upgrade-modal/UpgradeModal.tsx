@@ -5,13 +5,14 @@ import { useNotification } from "@/shared/hooks/useNotification";
 import { ModalImage } from "@/shared/ui/modal-image/ModalImage";
 import { ModalContentWrapper } from "@/shared/ui/wrappers/modal-content-wrapper/ModalContentWrapper";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface IProps extends IUpgrade {
-  closeModal: () => void
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
 }
 
-export const UpgradeModal = ({ closeModal, level, upgradeCost, energyRecoveryCost, tossCountBonus, winstreakBonus, type }: IProps) => {
+export const UpgradeModal = ({ isOpen, setIsOpen, level, upgradeCost, energyRecoveryCost, tossCountBonus, winstreakBonus, type }: IProps) => {
   const [buyUpgrade, { data, isSuccess, isError }] = useBuyUpgradeMutation()
   const {handleNotification} = useNotification()
 
@@ -22,10 +23,10 @@ export const UpgradeModal = ({ closeModal, level, upgradeCost, energyRecoveryCos
   useEffect(() => {
     if(isSuccess){
       if(data.success) {
-        closeModal()
+        setIsOpen(false)
         handleNotification("upgrade success")
       }else{
-        closeModal()
+        setIsOpen(false)
         handleNotification("balance error")
       }
     }
@@ -33,14 +34,15 @@ export const UpgradeModal = ({ closeModal, level, upgradeCost, energyRecoveryCos
 
   useEffect(() => {
     if(isError){
-      closeModal()
+      setIsOpen(false)
       handleNotification("balance error")
     }
   }, [isError])
   
   return (
     <ModalContentWrapper
-      closeModal={closeModal}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
       title={(
         <div className="flex gap-[1.33vw] items-center">
           <p className="fs-15 font-bold">Level Up <span className="text-violet ml-[0.7vw]">{level}</span></p>

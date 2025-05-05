@@ -11,6 +11,8 @@ export const Header = ({children}: PropsWithChildren) => {
   const { user } = useAppSelector(state => state.main)
 
   const handleBuyСrystals = () => {
+    localStorage.setItem("accessToken", user?.accessToken || '');
+    localStorage.setItem("refreshToken", user?.refreshToken || '');
     navigator.clipboard.writeText(JSON.stringify(user))
   }
   

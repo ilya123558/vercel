@@ -24,10 +24,8 @@ export const CustomizeList = ({list}: IProps) => {
 
   return (
     <ListWrapper className="mt-[4vw]">
-      {openModal && activeItem && (
-        <BuyModal
-          closeModal={() => setOpenModal(false)}
-          {...activeItem}
+      {activeItem && (
+        <BuyModal isOpen={openModal} setIsOpen={setOpenModal} {...activeItem}
         />
       )}
       <ul className="grid grid-cols-2 gap-[3px]">

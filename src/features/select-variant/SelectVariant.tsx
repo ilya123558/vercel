@@ -15,7 +15,7 @@ export const SelectVariant = () => {
   const { gameIsStarted, coinSide, statusGame } = useAppSelector(state => state.main.game)
   const [winSide, setWinSide] = useState<CoinSide | null>(null)
   
-  const [tossCoin, { data: toss, isError, error }] = useTossCoinMutation()
+  const [tossCoin, { data: toss }] = useTossCoinMutation()
 
   const handleSelectVariant = (value: CoinSide) => {
     if(statusGame) return

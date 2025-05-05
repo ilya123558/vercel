@@ -37,7 +37,7 @@ export const AutoBot = () => {
       >
         <div className="flex items-center p-[2.5vw_0px]">
           <div className="h-full w-41px ml-[3vw] mr-[2.67vw] flex items-center justify-center">
-            <Image src={'/images/component-icons/rocket.png'} alt='rocket' width={47} height={41} quality={100} className='h-47px min-w-41px'/>
+            <Image src={'/images/component-icons/rocket.png'} alt='rocket' width={100} height={100} quality={100} className='h-47px min-w-41px'/>
           </div>
           <div className="">
             <h3 className="fs-13">Auto Bot</h3>

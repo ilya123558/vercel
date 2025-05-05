@@ -10,16 +10,38 @@ interface IInitialState {
     coinSide: CoinSide | null;
     countGame: number;
   };
+  meta: {
+    pumpingPoints: number
+  }
 }
 
 const initialState: IInitialState = {
-  user: null,
+  user: {
+    id: 2,
+    photo: "https://t.me/i/userpic/320/WDUQ8R--Rfax5N63Pj0Yhi3-7iDFRulG4HaPLkmOYRYey1-d8wOKklSmi5RQ1Dw6.svg",
+    username: "zong_name",
+    fullName: "Илья",
+    dailyRewardDay: 2,
+    claimDailyReward: false,
+    balance: 387.5,
+    level: 2,
+    availableTasksCount: 1,
+    energyPercent: 90,
+    tossCount: 0,
+    maxTossCount: 10,
+    referralLink: "coin.impulsrent.ru?start=2",
+    accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ2Mjc0MjA2fQ.Iqw6mgUISp_eoomvSavy9Zw3z0oJmmEIiwZ-Pc3nInA",
+    refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ4ODYyNjA2fQ.ovuvAj9qP8jSyoTq5rc59H9usuNTvvDY5aeeo60fOC4"
+  },
   game: {
     gameIsStarted: false,
     statusGame: null,
     coinSide: null,
     countGame: 1,
   },
+  meta: {
+    pumpingPoints: 30
+  }
 };
 
 const mainSlice = createSlice({
@@ -67,6 +89,13 @@ const mainSlice = createSlice({
       state.game.countGame = action.payload;
     },
 
+    setPumpingPoints: (
+      state,
+      action: PayloadAction<IInitialState["meta"]["pumpingPoints"]>
+    ) => {
+      state.meta.pumpingPoints = action.payload;
+    },
+
     resetGame: (state) => {
       state.game.coinSide = null;
       state.game.countGame = 1;
@@ -97,7 +126,8 @@ export const {
   startGame,
   stopGame,
   resetGame,
-  nextGame,
+  nextGame, 
   timeOver,
+  setPumpingPoints,
 } = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

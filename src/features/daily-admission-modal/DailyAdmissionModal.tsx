@@ -3,11 +3,17 @@ import { ModalContentWrapper } from '@/shared/ui/wrappers/modal-content-wrapper/
 import { DailyAdmissionContent } from '../daily-admission-content/DailyAdmissionContent';
 import { IClaimDailyRewardResponse } from '@/entities/users/types/claimDailyReward';
 import { useState } from 'react';
+import { useClaimDailyRewardQuery } from '@/entities/users/api/users.api';
 
-export const DailyAdmissionModal = (props: IClaimDailyRewardResponse) => {
-  const [isOpen, setIsOpen] = useState(true)
+interface IProps {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}
 
-  const handleClick = async() => {
+export const DailyAdmissionModal = ({isOpen, setIsOpen}: IProps) => {
+  const { data: claimDailyRewardData } = useClaimDailyRewardQuery()
+
+  const handleClick = () => {
     // забрать дневную награду
     setIsOpen(false)
   }
@@ -16,10 +22,11 @@ export const DailyAdmissionModal = (props: IClaimDailyRewardResponse) => {
     <ModalContentWrapper
       title="Ежедневный вход"
       subTitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      imageComponent={<DailyAdmissionContent {...props} />}
+      imageComponent={claimDailyRewardData ? <DailyAdmissionContent {...claimDailyRewardData} /> : <></>}
       onClick={handleClick}
       textButton='Забрать'
       isOpen={isOpen}
+      setIsOpen={setIsOpen}
     />
   );
 };

@@ -7,10 +7,11 @@ import { ModalContentWrapper } from "@/shared/ui/wrappers/modal-content-wrapper/
 import { useEffect } from "react";
 
 interface IProps extends ICustomization {
-  closeModal: () => void
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
 }
 
-export const BuyModal = ({ closeModal, title, id, price, isActive, photo, type, isBought }: IProps) => {
+export const BuyModal = ({ isOpen, setIsOpen, title, id, price, isActive, photo, type, isBought }: IProps) => {
   const {handleNotification} = useNotification()
   
   const [buyCustomization, { isSuccess: buySuccess, isError: buyIsError }] = useBuyCustomizationMutation()
@@ -26,32 +27,33 @@ export const BuyModal = ({ closeModal, title, id, price, isActive, photo, type, 
 
   useEffect(() => {
     if(buySuccess) {
-      closeModal()
+      setIsOpen(false)
       handleNotification("buy success")
     }
     if(activateSuccess) {
-      closeModal()
+      setIsOpen(false)
       handleNotification("activeted success")
     }
   }, [buySuccess, activateSuccess, activateData])
 
   useEffect(() => {
     if(buyIsError){
-      closeModal()
+      setIsOpen(false)
       handleNotification("balance error")
     }
   }, [buyIsError])
 
   useEffect(() => {
     if(activateIsError){
-      closeModal()
+      setIsOpen(false)
       handleNotification("balance error")
     }
   }, [activateIsError])
 
   return (
     <ModalContentWrapper
-      closeModal={closeModal}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
       title={title}
       subTitle={
         type === CustomizationType.COIN 

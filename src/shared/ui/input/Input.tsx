@@ -12,7 +12,7 @@ export const Input = ({value, onChange}: IProps) => {
       value={value} 
       onChange={onChange}
       type="number"
-      className="col-span-3 bg-[#262437] rounded-[9px] border border-[#364357] h-42px text-center fs-16 font-semibold" 
+      className={"col-span-3 bg-[#262437] rounded-[9px] border border-[#364357] h-42px text-center fs-16 font-semibold w-full p-[0px_2vw]"}
     />
   );
 };

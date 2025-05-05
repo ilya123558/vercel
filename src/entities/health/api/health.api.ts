@@ -1,11 +1,9 @@
+import { baseQueryWithRefresh } from '@/shared/libs/baseQueryWithRefreshю'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const healthApi = createApi({
   reducerPath: 'healthApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/`,
-  }),
-  
+  baseQuery: baseQueryWithRefresh,
   endpoints: (builder) => ({
     checkServerIsWork: builder.query<{message: string}, void>({
       query: () => ({

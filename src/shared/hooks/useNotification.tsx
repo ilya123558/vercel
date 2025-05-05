@@ -12,6 +12,7 @@ export const useNotification = () => {
       | 'buy success'
       | 'activeted success'
       | 'upgrade success'
+      | 'upgrade incorrect'
   ) => {
     const map: Record<typeof type, { message: string; severity: AlertColor }> = {
       'energy over': {
@@ -38,6 +39,10 @@ export const useNotification = () => {
         message: 'Улучшено',
         severity: 'success',
       },
+      "upgrade incorrect": {
+        message: 'Недопустимое значение',
+        severity: 'error',
+      }
     };
 
     const { message, severity } = map[type];

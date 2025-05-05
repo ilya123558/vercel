@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 
 export const EnergyLimitModal = () => {
   const dispatch = useAppDispatch()
-
   const [isOpen, setIsOpen] = useState(true)
 
   const [updateEnergy, { data }] = useUpdateEnergyMutation()
@@ -33,6 +32,7 @@ export const EnergyLimitModal = () => {
       textButton='Восполнить'
       countValueInButton={20}
       isOpen={isOpen}
+      setIsOpen={setIsOpen}
     />
   );
 };
