@@ -31,8 +31,6 @@ export const Game = () => {
     }
   }, [])
 
-  if(typeof window === 'undefined') return <></>
-
   return (
     <div ref={containerRef} className="">
       <div style={{height: `calc(${availableHeight}px - 88px)`, opacity: availableHeight ? 1 : 0}} className="flex flex-col justify-end absolute w-full overflow-hidden">
