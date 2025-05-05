@@ -147,8 +147,6 @@ export const CoinAnimation: React.FC<{ animationData: any }> = ({
 		console.log('Вся анимация закончена!')
 	}
 
-	if(typeof window === 'undefined') return <></>
-
 	return (
 		<CoinFlipAnimation
 			animationData={animationData}
