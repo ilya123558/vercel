@@ -143,9 +143,17 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 export const CoinAnimation: React.FC<{ animationData: any }> = ({
 	animationData,
 }) => {
+	const [render, setRender] = useState(false)
+	useEffect(() => {
+		setTimeout(() => {
+			setRender(true)
+		}, 1000)
+	}, [])
 	const handleAnimationComplete = () => {
 		console.log('Вся анимация закончена!')
 	}
+
+	if(!render) return <></>
 
 	return (
 		<CoinFlipAnimation
