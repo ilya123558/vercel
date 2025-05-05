@@ -56,3 +56,22 @@ p{
 :focus{
   outline: none;
 }
+
+.animate-ping-custom {
+  animation: ping-custom 2s cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes ping-custom {
+  50%, 80% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  90% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

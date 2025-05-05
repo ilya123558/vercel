@@ -1,39 +1,38 @@
 'use client'
 import { CoinSide } from "@/entities/general/types/general";
-import { useTossCoinMutation } from "@/entities/users/api/users.api";
-import { ITossResponse } from "@/entities/users/types/toss";
+// import { useTossCoinMutation } from "@/entities/users/api/users.api";
+import { useGame } from "@/shared/hooks/useGame";
+import { useTossCoinMutationTemp } from "@/shared/hooks/useTossCoinMutationTemp";
 import { ActiveBtn } from "@/shared/ui/button/ActiveBtn";
 import { DefaultBtn } from "@/shared/ui/button/DefaultBtn";
 import { DisableBtn } from "@/shared/ui/button/DisableBtn";
 import { Container } from "@/shared/ui/container/Container";
 import { TimerScale } from "@/shared/ui/timer-scale/TimerScale";
-import { resetGame, setCoinSide, setEnergyPercent, setStatusGame, setTossCount, useAppDispatch, useAppSelector } from "@/views/store";
+import { setEnergyPercent, setStatusGame, setTossCount, useAppDispatch } from "@/views/store";
 import { useEffect, useState } from "react";
+
 
 export const SelectVariant = () => {
   const dispatch = useAppDispatch()
-  const { gameIsStarted, coinSide, statusGame } = useAppSelector(state => state.main.game)
   const [winSide, setWinSide] = useState<CoinSide | null>(null)
   
-  const [tossCoin, { data: toss }] = useTossCoinMutation()
+  // const [tossCoin, { data: toss }] = useTossCoinMutation()
+  const [tossCoin, { data: toss }] = useTossCoinMutationTemp()
 
-  const handleSelectVariant = (value: CoinSide) => {
-    if(statusGame) return
+  const { 
+    coinSide, 
+    gameIsStarted, 
+    statusGame,
+    handleSelectVariant 
+  } = useGame()
 
-    if(value === CoinSide.HEADS) {
-      dispatch(setCoinSide(CoinSide.HEADS))
-    }
-
-    if(value === CoinSide.TAILS) {
-      dispatch(setCoinSide(CoinSide.TAILS))
-    }
-  }
-
+  // Проверка результата игры  
   useEffect(() => {
     if(toss) {
       dispatch(setEnergyPercent(toss.energyPercent))
       dispatch(setTossCount(toss.tossCount))
 
+      // Если выиграл мениям статус игры на win, записываем выигрышную сторону
       if(toss.guessed) {
         dispatch(setStatusGame('win'))
         setWinSide(coinSide)
@@ -44,17 +43,12 @@ export const SelectVariant = () => {
     }
   }, [toss])
 
+  // Запрос на результат игры
   useEffect(() => {
     if(gameIsStarted && coinSide) {
       tossCoin({coinSide})
     }
   }, [gameIsStarted, coinSide])
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetGame())
-    }
-  }, [])
 
   if(!gameIsStarted) {
     return <div className="max-h-[96px] h-full w-full bg-transparent"></div>

@@ -26,7 +26,7 @@ export const Checklist = () => {
   }
   
   return (
-    <motion.div {...animationRight} className="relative z-[11] w-full">
+    <motion.div {...animationRight} className="relative z-[30] w-full">
       <AddEnergyModal isOpen={isOpenAddEnergyModal} setIsOpen={setIsOpenAddEnergyModal} />
       {isSuccess && <DailyAdmissionModal isOpen={isOpenDailyAdmissionModal} setIsOpen={setIsOpenDailyAdmissionModal} />}
       <Container>

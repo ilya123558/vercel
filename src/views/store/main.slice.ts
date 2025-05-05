@@ -10,6 +10,11 @@ interface IInitialState {
     coinSide: CoinSide | null;
     countGame: number;
   };
+  coinAnimation: {
+    isStarted: boolean
+    isChoiceVisible: boolean
+    isCompleted: boolean
+  }
   meta: {
     pumpingPoints: number
   }
@@ -27,7 +32,7 @@ const initialState: IInitialState = {
     level: 2,
     availableTasksCount: 1,
     energyPercent: 90,
-    tossCount: 0,
+    tossCount: 100,
     maxTossCount: 10,
     referralLink: "coin.impulsrent.ru?start=2",
     accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ2Mjc0MjA2fQ.Iqw6mgUISp_eoomvSavy9Zw3z0oJmmEIiwZ-Pc3nInA",
@@ -38,6 +43,11 @@ const initialState: IInitialState = {
     statusGame: null,
     coinSide: null,
     countGame: 1,
+  },
+  coinAnimation: {
+    isStarted: false,
+    isChoiceVisible: false,
+    isCompleted: false,
   },
   meta: {
     pumpingPoints: 30
@@ -113,6 +123,16 @@ const mainSlice = createSlice({
       state.game.coinSide = null;
       state.game.statusGame = "defeat";
     },
+
+    setIsStarted: (state, action: PayloadAction<IInitialState["coinAnimation"]["isStarted"]>) => {
+      state.coinAnimation.isStarted = action.payload;
+    },
+    setIsChoiceVisible: (state, action: PayloadAction<IInitialState["coinAnimation"]["isChoiceVisible"]>) => {
+      state.coinAnimation.isStarted = action.payload;
+    },
+    setIsCompleted: (state, action: PayloadAction<IInitialState["coinAnimation"]["isCompleted"]>) => {
+      state.coinAnimation.isStarted = action.payload;
+    },
   },
 });
 
@@ -129,5 +149,8 @@ export const {
   nextGame, 
   timeOver,
   setPumpingPoints,
+  setIsChoiceVisible,
+  setIsCompleted,
+  setIsStarted
 } = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;
