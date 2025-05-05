@@ -18,7 +18,10 @@ export const Select = ({ activeOptionsValue, setActiveOptionsValue, options }: I
       }
     };
 
-    document?.addEventListener('click', handleClickOutside);
+
+    if (typeof window !== "undefined"){
+      document.addEventListener('click', handleClickOutside);
+    }
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
