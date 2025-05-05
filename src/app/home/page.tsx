@@ -7,7 +7,7 @@ import { Game } from "@/widgets/game/Game";
 import { Header } from "@/widgets/header/Header";;
 
 export default function Page() {
-  return (
+  return ( 
     <section className="">
       <Container>
         <Header>
