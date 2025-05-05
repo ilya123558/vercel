@@ -20,7 +20,7 @@ export default function RootLayout({
       <Head>
         <script src="https://telegram.org/js/telegram-web-app.js" async></script>
       </Head>
-      <body className="mt-[40px]">
+      <body className="mt-[70px]">
         <ProviderWrapper>
           <ZoomBlocker />
           {children}
