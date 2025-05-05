@@ -34,9 +34,9 @@ export const Game = () => {
   return (
     <div ref={containerRef} className="">
       <div style={{height: `calc(${availableHeight}px - 88px)`, opacity: availableHeight ? 1 : 0}} className="flex flex-col justify-end absolute w-full overflow-hidden">
-        {/* <GameStatusInfo />
+        {/* <GameStatusInfo /> */}
         <CoinContent />
-        <SelectVariant /> */}
+        {/* <SelectVariant /> */}
       </div>
     </div>
   );
