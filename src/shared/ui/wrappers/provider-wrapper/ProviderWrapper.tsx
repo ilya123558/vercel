@@ -6,6 +6,15 @@ import { SnackbarProvider } from 'notistack';
 
 export const ProviderWrapper = ({children}: PropsWithChildren) => {
   useEffect(() => {
+    if (typeof window !== "undefined" && !window.Telegram) {
+      const script = document.createElement('script');
+      script.src = "https://telegram.org/js/telegram-web-app.js?57";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
+  
+  useEffect(() => {
     const checkTelegramWebApp = setInterval(() => {
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
