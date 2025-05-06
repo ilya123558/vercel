@@ -21,7 +21,7 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 	const [animationState, setAnimationState] = useState<'start-animation' | 'end-animation' | null>(null)
 	const { isCompleted, isStarted, isChoiceVisible } = useAppSelector(state => state.main.coinAnimation)
 
-	const { handleStartGame, coinSide } = useGame()
+	const { handleStartGame, coinSide, statusGame } = useGame()
 
 	const containerRef = useRef<HTMLDivElement>(null)
 	const animationRef = useRef<AnimationItem | null>(null)
@@ -126,9 +126,9 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				scale: animationState !== 'start-animation' ? 1.9 : 1
+				scale: animationState !== 'start-animation' ? 2.5 : 1
 			}}
-			className={'transition-all duration-1000'}
+			className={'transition-all duration-[0.5s]'}
 		>
 			<div
 				id={containerId}
