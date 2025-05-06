@@ -56,7 +56,7 @@ export const SelectVariant = () => {
 
   return (
     <div className={`relative z-[30] transition-all max-h-[96px] h-full bg-transparent translate-y-[-8vw]`}>
-      <Container>
+      <Container className="">
         <div className="flex items-center justify-between gap-[5px] h-full">
           {statusGame && coinSide
             ? (

@@ -4,28 +4,37 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { setUser, useAppDispatch } from "@/views/store";
 import { LoginApiClient } from "@/entities/users/api/login.api";
-import { useCheckServerIsWorkQuery } from "@/entities/health/api/health.api";
 import { retrieveRawInitData } from '@telegram-apps/sdk';
 
 export default function Page() {
-  const router = useRouter()
-  const dispatch = useAppDispatch()
-  // useCheckServerIsWorkQuery()
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const login = async () => {
-      const init_data = retrieveRawInitData()
+      const init_data = retrieveRawInitData();
       try {
         if (init_data) {
           const data = await new LoginApiClient().loginByInitData(init_data);
           dispatch(setUser(data.user));
-          router.push('/home');
+
+          const backgroundImage = '/images/home/bg.png';
+          const img = new Image();
+          img.src = backgroundImage;
+
+          img.onload = () => {
+            router.push('/home');
+          };
+
+          img.onerror = () => {
+            alert("Не удалось загрузить изображение.");
+          };
         } else {
           alert("initData не доступно");
         }
       }
       catch (e) {
-        alert(JSON.stringify(e))
+        alert(JSON.stringify(e));
       }
     };
 

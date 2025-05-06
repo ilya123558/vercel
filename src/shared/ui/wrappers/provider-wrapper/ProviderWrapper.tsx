@@ -57,9 +57,15 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
     const body = document.body;
 
     if (page === 'home') {
-      body.style.backgroundImage = 'url(/images/home/bg.png)';
-      body.style.backgroundSize = 'cover';
-      body.style.backgroundPosition = 'center';
+      const backgroundUrl = '/images/home/bg.png';
+
+      const img = new Image();
+      img.src = backgroundUrl;
+      img.onload = () => {
+        body.style.backgroundImage = `url(${backgroundUrl})`;
+        body.style.backgroundSize = 'cover';
+        body.style.backgroundPosition = 'center';
+      };
     } else {
       body.style.backgroundImage = '';
     }
@@ -67,7 +73,7 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
     return () => {
       body.style.backgroundImage = '';
     };
-  }, [page])
+  }, [page]);
 
   return (
     <Provider store={store}>
