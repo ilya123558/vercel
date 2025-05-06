@@ -3,8 +3,11 @@ import { store } from "@/views/store";
 import { PropsWithChildren, useEffect } from "react";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from 'notistack';
+import { usePathname } from "next/navigation";
 
 export const ProviderWrapper = ({children}: PropsWithChildren) => {
+  const page = usePathname().split('/')[1]
+
   useEffect(() => {
     const metaViewport = document.createElement('meta');
     metaViewport.name = 'viewport';
@@ -49,6 +52,22 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
   
     return () => clearInterval(checkTelegramWebApp);
   }, []);
+
+  useEffect(() => {
+    const body = document.body;
+
+    if (page === 'home') {
+      body.style.backgroundImage = 'url(/images/home/bg.png)';
+      body.style.backgroundSize = 'cover';
+      body.style.backgroundPosition = 'center';
+    } else {
+      body.style.backgroundImage = '';
+    }
+
+    return () => {
+      body.style.backgroundImage = '';
+    };
+  }, [page])
 
   return (
     <Provider store={store}>
