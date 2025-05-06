@@ -38,12 +38,6 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
         const isIos = typeof navigator !== 'undefined' && navigator.userAgent ? /iPhone|iPad|iPod/i.test(navigator.userAgent) : false;
         const isDesktop = isAndroid || isIos ? false : true
 
-        alert(JSON.stringify({
-          isAndroid,
-          isIos,
-          isDesktop
-        }))
-
         if(!isDesktop) {
           // @ts-ignore
           tg.requestFullscreen();

@@ -126,14 +126,14 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				scale: animationState !== 'start-animation' ? 2.5 : 1
+				scale: animationState !== 'start-animation' ? 3.5 : 2
 			}}
 			className={'transition-all duration-[0.5s]'}
 		>
 			<div
 				id={containerId}
 				ref={containerRef}
-				style={{ width: '100%', height: '70vw' }}
+				style={{ width: '100%', height: '50vw' }}
 				onClick={startAnimation}
 			/>
 		</div>
