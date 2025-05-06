@@ -114,6 +114,9 @@ const mainSlice = createSlice({
       state.game.countGame = 1;
       state.game.gameIsStarted = false;
       state.game.statusGame = null;
+      state.coinAnimation.isStarted = false
+      state.coinAnimation.isChoiceVisible = false
+      state.coinAnimation.isCompleted = false
     },
 
     nextGame: (state) => {
