@@ -61,6 +61,16 @@ p{
   animation: ping-custom 2s cubic-bezier(0, 0, 0.2, 1);
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Для Firefox */
+}
+
 @keyframes ping-custom {
   50%, 80% {
     transform: scale(2);
