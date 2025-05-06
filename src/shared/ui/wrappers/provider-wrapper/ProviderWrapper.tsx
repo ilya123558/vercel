@@ -36,14 +36,14 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
 
         const isAndroid = typeof navigator !== 'undefined' && navigator.userAgent ? /Android/i.test(navigator.userAgent) : false;
         const isIos = typeof navigator !== 'undefined' && navigator.userAgent ? /iPhone|iPad|iPod/i.test(navigator.userAgent) : false;
-        const isDesktop = typeof navigator !== 'undefined' && navigator.userAgent ? /Windows|Macintosh|Linux/i.test(navigator.userAgent) : false;
+        const isDesktop = isAndroid || isIos ? false : true
 
         if(!isDesktop) {
           // @ts-ignore
           tg.requestFullscreen();
         }
 
-        const topSafeArea = isAndroid ? 85 : 95;
+        const topSafeArea = isAndroid ? 70 : 80;
         document.body.style.marginTop = `${!isDesktop ? topSafeArea : 20}px`;
 
         clearInterval(checkTelegramWebApp);
