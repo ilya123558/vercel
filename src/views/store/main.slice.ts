@@ -9,45 +9,40 @@ interface IInitialState {
     statusGame: "win" | "defeat" | null;
     coinSide: CoinSide | null;
     countGame: number;
+    winSide: CoinSide | null
+    isCompiled: boolean
   };
-  coinAnimation: {
-    isStarted: boolean
-    isChoiceVisible: boolean
-    isCompleted: boolean
-  }
   meta: {
     pumpingPoints: number
   }
 }
 
 const initialState: IInitialState = {
-  user: {
-    id: 2,
-    photo: "https://t.me/i/userpic/320/WDUQ8R--Rfax5N63Pj0Yhi3-7iDFRulG4HaPLkmOYRYey1-d8wOKklSmi5RQ1Dw6.svg",
-    username: "zong_name",
-    fullName: "Илья",
-    dailyRewardDay: 2,
-    claimDailyReward: false,
-    balance: 387.5,
-    level: 2,
-    availableTasksCount: 1,
-    energyPercent: 90,
-    tossCount: 100,
-    maxTossCount: 10,
-    referralLink: "coin.impulsrent.ru?start=2",
-    accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ2Mjc0MjA2fQ.Iqw6mgUISp_eoomvSavy9Zw3z0oJmmEIiwZ-Pc3nInA",
-    refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ4ODYyNjA2fQ.ovuvAj9qP8jSyoTq5rc59H9usuNTvvDY5aeeo60fOC4"
-  },
+  // user: {
+  //   id: 2,
+  //   photo: "https://t.me/i/userpic/320/WDUQ8R--Rfax5N63Pj0Yhi3-7iDFRulG4HaPLkmOYRYey1-d8wOKklSmi5RQ1Dw6.svg",
+  //   username: "zong_name",
+  //   fullName: "Илья",
+  //   dailyRewardDay: 2,
+  //   claimDailyReward: false,
+  //   balance: 387.5,
+  //   level: 2,
+  //   availableTasksCount: 1,
+  //   energyPercent: 90,
+  //   tossCount: 100,
+  //   maxTossCount: 10,
+  //   referralLink: "coin.impulsrent.ru?start=2",
+  //   accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ2Mjc0MjA2fQ.Iqw6mgUISp_eoomvSavy9Zw3z0oJmmEIiwZ-Pc3nInA",
+  //   refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzQ4ODYyNjA2fQ.ovuvAj9qP8jSyoTq5rc59H9usuNTvvDY5aeeo60fOC4"
+  // },
+  user: null,
   game: {
     gameIsStarted: false,
     statusGame: null,
     coinSide: null,
     countGame: 1,
-  },
-  coinAnimation: {
-    isStarted: false,
-    isChoiceVisible: false,
-    isCompleted: false,
+    winSide: null,
+    isCompiled: true
   },
   meta: {
     pumpingPoints: 30
@@ -101,6 +96,9 @@ const mainSlice = createSlice({
     ) => {
       state.game.countGame = action.payload;
     },
+    setWinSide: (state, action: PayloadAction<IInitialState["game"]["winSide"]>) => {
+      state.game.winSide = action.payload;
+    },
 
     setPumpingPoints: (
       state,
@@ -109,17 +107,27 @@ const mainSlice = createSlice({
       state.meta.pumpingPoints = action.payload;
     },
 
+    completeGame: (state) => {
+      state.game.isCompiled = true
+
+      if(state.game.winSide === state.game.coinSide) {
+        state.game.statusGame = 'win'
+      }else{
+        state.game.statusGame = 'defeat'
+      }
+    },
+
     resetGame: (state) => {
       state.game.coinSide = null;
       state.game.countGame = 1;
       state.game.gameIsStarted = false;
       state.game.statusGame = null;
-      state.coinAnimation.isStarted = false
-      state.coinAnimation.isChoiceVisible = false
-      state.coinAnimation.isCompleted = false
+      state.game.isCompiled = true;
+      state.game.winSide = null;
     },
 
     nextGame: (state) => {
+      state.game.isCompiled = false
       state.game.coinSide = null;
       state.game.countGame = state.game.countGame + 1;
       state.game.statusGame = null;
@@ -128,16 +136,6 @@ const mainSlice = createSlice({
     timeOver: (state) => {
       state.game.coinSide = null;
       state.game.statusGame = "defeat";
-    },
-
-    setIsStarted: (state, action: PayloadAction<IInitialState["coinAnimation"]["isStarted"]>) => {
-      state.coinAnimation.isStarted = action.payload;
-    },
-    setIsChoiceVisible: (state, action: PayloadAction<IInitialState["coinAnimation"]["isChoiceVisible"]>) => {
-      state.coinAnimation.isStarted = action.payload;
-    },
-    setIsCompleted: (state, action: PayloadAction<IInitialState["coinAnimation"]["isCompleted"]>) => {
-      state.coinAnimation.isStarted = action.payload;
     },
   },
 });
@@ -149,14 +147,13 @@ export const {
   setCoinSide,
   setCountGame,
   setStatusGame,
+  setWinSide, 
   startGame,
   stopGame,
   resetGame,
-  nextGame, 
+  nextGame,
   timeOver,
   setPumpingPoints,
-  setIsChoiceVisible,
-  setIsCompleted,
-  setIsStarted
+  completeGame
 } = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

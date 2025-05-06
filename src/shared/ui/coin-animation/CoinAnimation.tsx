@@ -1,7 +1,7 @@
 'use client'
 import { CoinSide } from '@/entities/general/types/general'
 import { useGame } from '@/shared/hooks/useGame'
-import { setIsChoiceVisible, setIsCompleted, setIsStarted, useAppDispatch, useAppSelector } from '@/views/store'
+import { completeGame, setWinSide, useAppDispatch, useAppSelector } from '@/views/store'
 import lottie, { AnimationItem } from 'lottie-web'
 import React, { useEffect, useRef, useState } from 'react'
 import './CoinAnimation.scss'
@@ -12,22 +12,44 @@ interface CoinFlipAnimationProps {
 	onAnimationComplete?: () => void
 }
 
-const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
-	animationData,
-	containerId = 'coin-animation-container',
-	onAnimationComplete,
-}) => {
+const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-container' }: CoinFlipAnimationProps) => {
 	const dispatch = useAppDispatch()
-	const [animationState, setAnimationState] = useState<'start-animation' | 'end-animation' | null>(null)
-	const { isCompleted, isStarted, isChoiceVisible } = useAppSelector(state => state.main.coinAnimation)
 
-	const { handleStartGame, coinSide, statusGame } = useGame()
+	const [animationState, setAnimationState] = useState<'start-animation' | 'end-animation' | null>(null)
+	const { handleStartGame, coinSide, gameIsStarted, winSide } = useGame()
 
 	const containerRef = useRef<HTMLDivElement>(null)
 	const animationRef = useRef<AnimationItem | null>(null)
 	const currentSegmentRef = useRef<'idle' | 'intro' | 'rotation' | 'final'>('idle')
 	const shouldPlayFinalRef = useRef(false)
 	const isRotationLooping = useRef(false)
+	const winSideRef = useRef<CoinSide | null>(null)
+
+	const handleComplete = () => {
+		const segment = currentSegmentRef.current
+
+		if (segment === 'intro') {
+			currentSegmentRef.current = 'rotation'
+			isRotationLooping.current = true
+			playRotationCycle()
+		} 
+
+		else if (segment === 'rotation') {
+			if (shouldPlayFinalRef.current) {
+				shouldPlayFinalRef.current = false
+				currentSegmentRef.current = 'final'
+				// Если орел [43, 69], решка [70, 96]
+				animationRef.current?.playSegments(winSideRef.current === CoinSide.HEADS ? [43, 69] : [70, 96], true)
+			} 
+			else if (isRotationLooping.current) {
+				playRotationCycle()
+			}
+		} 
+
+		else if (segment === 'final') {
+			dispatch(completeGame())
+		}
+	}
 
 	useEffect(() => {
 		if (!containerRef.current) return
@@ -42,39 +64,13 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 
 		animationRef.current = anim
 
-		const handleComplete = () => {
-			const segment = currentSegmentRef.current
-			console.log(`Завершён сегмент: ${segment}`)
-
-			if (segment === 'intro') {
-				currentSegmentRef.current = 'rotation'
-				isRotationLooping.current = true
-				dispatch(setIsChoiceVisible(true))
-				playRotationCycle()
-			} else if (segment === 'rotation') {
-				if (shouldPlayFinalRef.current) {
-					// пользователь сделал выбор — пора играть финал
-					shouldPlayFinalRef.current = false
-					currentSegmentRef.current = 'final'
-					// Если орел [43, 69], решка [70, 96]
-					anim.playSegments(coinSide === CoinSide.HEADS ? [43, 69] : [70, 96], true)
-					// anim.playSegments([70, 96], true)
-				} else if (isRotationLooping.current) {
-					playRotationCycle()
-				}
-			} else if (segment === 'final') {
-				dispatch(setIsCompleted(true))
-				if (onAnimationComplete) onAnimationComplete()
-			}
-		}
-
 		anim.addEventListener('complete', handleComplete)
 
 		return () => {
 			anim.removeEventListener('complete', handleComplete)
 			anim.destroy()
 		}
-	}, [animationData, onAnimationComplete])
+	}, [animationData])
 
 	const playRotationCycle = () => {
 		if (!animationRef.current) return
@@ -83,12 +79,9 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 	}
 
 	const startAnimation = () => {
-		if(!animationRef.current || !(currentSegmentRef.current === 'final' || !isStarted)) return
+		if(!animationRef.current || !(currentSegmentRef.current === 'final' || !gameIsStarted)) return
 		if(handleStartGame()) {
 			setAnimationState('start-animation')
-			dispatch(setIsStarted(true))
-			dispatch(setIsCompleted(false))
-			dispatch(setIsChoiceVisible(false))
 			isRotationLooping.current = false
 			shouldPlayFinalRef.current = false
 			currentSegmentRef.current = 'intro'
@@ -96,7 +89,7 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 		}
 	}
 
-	const chooseSide = (side: CoinSide.HEADS | CoinSide.TAILS) => {
+	const chooseSide = () => {
 		if (!animationRef.current) return
 		setAnimationState('end-animation')
 
@@ -109,16 +102,24 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 			// если по какой-то причине не в цикле — сразу финал
 			currentSegmentRef.current = 'final'
 			// Если орел [43, 69], решка [70, 96]
-			animationRef.current.playSegments(side === CoinSide.HEADS ? [43, 69] : [70, 96], true)
+			animationRef.current.playSegments(winSideRef.current === CoinSide.HEADS ? [43, 69] : [70, 96], true)
 			// animationRef.current.playSegments([70, 96], true)
 		}
 	}
 
 	useEffect(() => {
-		if(coinSide) {
-			chooseSide(coinSide)
+		winSideRef.current = winSide;
+		
+		if(gameIsStarted) {
+			chooseSide()
 		}
-	}, [coinSide])
+	}, [winSide]);
+
+	// useEffect(() => {
+	// 	if(coinSide) {
+	// 		chooseSide()
+	// 	}
+	// }, [coinSide])
 
 	return (
 		<div
@@ -126,7 +127,7 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				scale: animationState !== 'start-animation' ? 3.5 : 2
+				scale: animationState !== 'start-animation' ? 3.55 : 2.05
 			}}
 			className={'transition-all duration-[0.5s]'}
 		>
@@ -135,24 +136,14 @@ const CoinFlipAnimation: React.FC<CoinFlipAnimationProps> = ({
 				ref={containerRef}
 				style={{ width: '100%', height: '50vw' }}
 				onClick={startAnimation}
+				className='transition-all active:scale-95'
 			/>
 		</div>
 	)
 }
 
-const CoinAnimation: React.FC<{ animationData: any }> = ({
-	animationData,
-}) => {
-	const handleAnimationComplete = () => {
-		console.log('Вся анимация закончена!')
-	}
-
-	return (
-		<CoinFlipAnimation
-			animationData={animationData}
-			onAnimationComplete={handleAnimationComplete}
-		/>
-	)
+const CoinAnimation = ({ animationData }: { animationData: any }) => {
+	return <CoinFlipAnimation animationData={animationData} />
 }
 
 export default CoinAnimation

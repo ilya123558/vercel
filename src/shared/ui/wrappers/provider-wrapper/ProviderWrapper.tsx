@@ -32,21 +32,24 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
   useEffect(() => {
     const checkTelegramWebApp = setInterval(() => {
       if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-
-        const isAndroid = typeof navigator !== 'undefined' && navigator.userAgent ? /Android/i.test(navigator.userAgent) : false;
-        const isIos = typeof navigator !== 'undefined' && navigator.userAgent ? /iPhone|iPad|iPod/i.test(navigator.userAgent) : false;
-        const isDesktop = isAndroid || isIos ? false : true
-
-        if(!isDesktop) {
-          // @ts-ignore
-          tg.requestFullscreen();
+        try{
+          const tg = window.Telegram.WebApp;
+  
+          const isAndroid = typeof navigator !== 'undefined' && navigator.userAgent ? /Android/i.test(navigator.userAgent) : false;
+          const isIos = typeof navigator !== 'undefined' && navigator.userAgent ? /iPhone|iPad|iPod/i.test(navigator.userAgent) : false;
+          const isDesktop = isAndroid || isIos ? false : true
+  
+          if(!isDesktop) {
+            // @ts-ignore
+            tg.requestFullscreen();
+          }
+  
+          const topSafeArea = isAndroid ? 80 : 90;
+          document.body.style.marginTop = `${isDesktop ? 8 : topSafeArea }px`;
+  
+          clearInterval(checkTelegramWebApp);
         }
-
-        const topSafeArea = isAndroid ? 80 : 90;
-        document.body.style.marginTop = `${isDesktop ? 8 : topSafeArea }px`;
-
-        clearInterval(checkTelegramWebApp);
+        catch(e) {}
       }
     }, 100);
   

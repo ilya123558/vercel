@@ -1,14 +1,17 @@
-import { nextGame, resetGame, setCoinSide, startGame, useAppDispatch, useAppSelector } from "@/views/store";
+import { nextGame, resetGame, setCoinSide, startGame, setEnergyPercent, setStatusGame, setTossCount, useAppDispatch, useAppSelector, setWinSide } from "@/views/store";
 import { useNotification } from "./useNotification";
 import { CoinSide } from "@/entities/general/types/general";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useTossCoinMutationTemp } from "./useTossCoinMutationTemp";
+import { useTossCoinMutation } from "@/entities/users/api/users.api";
 
 export const useGame = () => {
   const dispatch = useAppDispatch()
-  const { gameIsStarted, statusGame, coinSide } = useAppSelector(state => state.main.game)
+  const { gameIsStarted, statusGame, coinSide, winSide, countGame, isCompiled } = useAppSelector(state => state.main.game)
   const { user } = useAppSelector(state => state.main)
   
-
+  const [tossCoin, { data: toss }] = useTossCoinMutation()
+  // const [tossCoin, { data: toss }] = useTossCoinMutationTemp()
   const { handleNotification } = useNotification()
 
   // Следующая игра
@@ -22,7 +25,7 @@ export const useGame = () => {
   
   // Начать игру
   const handleStartGame = () => {
-    if(!user) return true
+    if(!user) return false
 
     // Если закончились броски останавливаем игру
     if(user.tossCount === 0) {
@@ -40,16 +43,30 @@ export const useGame = () => {
     return true
   }
 
+  // Проверка результата игры  
+  useEffect(() => {
+    if(toss) {      
+      dispatch(setEnergyPercent(toss.energyPercent))
+      dispatch(setTossCount(toss.tossCount))
+
+      // Записываем выигрышную сторону
+      if(toss.guessed) {
+        dispatch(setWinSide(coinSide))
+      }else{
+        dispatch(setWinSide(coinSide === CoinSide.HEADS ? CoinSide.TAILS: CoinSide.HEADS))
+      } 
+    }
+  }, [toss])
+
+  // Запрос на результат игры
+  useEffect(() => {
+    if(gameIsStarted && coinSide) {
+      tossCoin({coinSide})
+    }
+  }, [gameIsStarted, coinSide])
+
   const handleSelectVariant = (value: CoinSide) => {
-    if(statusGame) return
-
-    if(value === CoinSide.HEADS) {
-      dispatch(setCoinSide(CoinSide.HEADS))
-    }
-
-    if(value === CoinSide.TAILS) {
-      dispatch(setCoinSide(CoinSide.TAILS))
-    }
+    dispatch(setCoinSide(value))
   }
 
   return {
@@ -57,6 +74,9 @@ export const useGame = () => {
     statusGame, 
     coinSide, 
     user,
+    winSide,
+    countGame, 
+    isCompiled,
     handleNextGame,
     handleStartGame,
     handleSelectVariant
