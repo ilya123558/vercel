@@ -44,7 +44,7 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
         }
 
         const topSafeArea = isAndroid ? 85 : 95;
-        document.body.style.marginTop = `${isDesktop ? 20 : topSafeArea}px`;
+        document.body.style.marginTop = `${!isDesktop ? topSafeArea : 20}px`;
 
         clearInterval(checkTelegramWebApp);
       }
