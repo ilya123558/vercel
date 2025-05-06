@@ -49,8 +49,8 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
           tg.requestFullscreen();
         }
 
-        const topSafeArea = isAndroid ? 70 : 80;
-        document.body.style.marginTop = `${!isDesktop ? topSafeArea : 20}px`;
+        const topSafeArea = isAndroid ? 80 : 90;
+        document.body.style.marginTop = `${isDesktop ? 8 : topSafeArea }px`;
 
         clearInterval(checkTelegramWebApp);
       }
