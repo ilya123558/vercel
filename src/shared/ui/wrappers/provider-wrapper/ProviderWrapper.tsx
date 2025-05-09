@@ -3,22 +3,16 @@ import { store } from "@/views/store";
 import { PropsWithChildren, useEffect } from "react";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from 'notistack';
-import { usePathname } from "next/navigation";
+import { usePreloadImages } from "@/shared/hooks/usePreloadImages";
+import { usePreventZoom } from "@/shared/hooks/usePreventZoom";
+import { useTelegram } from "@/shared/hooks/useTelegram";
+import { useGetDevice } from "@/shared/hooks/useGetDevice";
 
 export const ProviderWrapper = ({children}: PropsWithChildren) => {
-  const page = usePathname().split('/')[1]
-
-  useEffect(() => {
-    const metaViewport = document.createElement('meta');
-    metaViewport.name = 'viewport';
-    metaViewport.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
-
-    document.head.appendChild(metaViewport);
-
-    return () => {
-      document.head.removeChild(metaViewport);
-    };
-  }, []);
+  usePreventZoom()
+  usePreloadImages()
+  const { webApp } = useTelegram()
+  const { getDevices, getTelegramTopPaddingValue } = useGetDevice()
 
   useEffect(() => {
     if (typeof window !== "undefined" && !window.Telegram) {
@@ -30,53 +24,17 @@ export const ProviderWrapper = ({children}: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
-    const checkTelegramWebApp = setInterval(() => {
-      if (window.Telegram && window.Telegram.WebApp) {
-        try{
-          const tg = window.Telegram.WebApp;
-  
-          const isAndroid = typeof navigator !== 'undefined' && navigator.userAgent ? /Android/i.test(navigator.userAgent) : false;
-          const isIos = typeof navigator !== 'undefined' && navigator.userAgent ? /iPhone|iPad|iPod/i.test(navigator.userAgent) : false;
-          const isDesktop = isAndroid || isIos ? false : true
-  
-          if(!isDesktop) {
-            // @ts-ignore
-            tg.requestFullscreen();
-          }
-  
-          const topSafeArea = isAndroid ? 80 : 90;
-          document.body.style.marginTop = `${isDesktop ? 8 : topSafeArea }px`;
-  
-          clearInterval(checkTelegramWebApp);
-        }
-        catch(e) {}
+    if (webApp) {
+      const { isDesktop } = getDevices()
+      const topSafeArea = getTelegramTopPaddingValue()
+
+      if(!isDesktop) {
+        webApp.requestFullscreen();
       }
-    }, 100);
-  
-    return () => clearInterval(checkTelegramWebApp);
-  }, []);
 
-  useEffect(() => {
-    const body = document.body;
-
-    if (page === 'home') {
-      const backgroundUrl = '/images/home/bg.png';
-
-      const img = new Image();
-      img.src = backgroundUrl;
-      img.onload = () => {
-        body.style.backgroundImage = `url(${backgroundUrl})`;
-        body.style.backgroundSize = 'cover';
-        body.style.backgroundPosition = 'center';
-      };
-    } else {
-      body.style.backgroundImage = '';
+      document.body.style.paddingTop = `${topSafeArea}px`;
     }
-
-    return () => {
-      body.style.backgroundImage = '';
-    };
-  }, [page]);
+  }, [webApp]);
 
   return (
     <Provider store={store}>
