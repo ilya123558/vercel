@@ -4,31 +4,24 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { setUser, useAppDispatch } from "@/views/store";
 import { LoginApiClient } from "@/entities/users/api/login.api";
-import { retrieveRawInitData } from '@telegram-apps/sdk';
+import { useTelegram } from "@/shared/hooks/useTelegram";
 
 export default function Page() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { webApp } = useTelegram()
 
   useEffect(() => {
     const login = async () => {
-      const init_data = retrieveRawInitData();
+      if(!webApp) return
+      const init_data = webApp.initData
+
       try {
         if (init_data) {
           const data = await new LoginApiClient().loginByInitData(init_data);
           dispatch(setUser(data.user));
+          router.push('/home');
 
-          const backgroundImage = '/images/home/bg.png';
-          const img = new Image();
-          img.src = backgroundImage;
-
-          img.onload = () => {
-            router.push('/home');
-          };
-
-          img.onerror = () => {
-            alert("Не удалось загрузить изображение.");
-          };
         } else {
           alert("initData не доступно");
         }
@@ -39,7 +32,7 @@ export default function Page() {
     };
 
     login();
-  }, [dispatch, router]);
+  }, [dispatch, router, webApp]);
 
   return (
     <section className="flex items-center justify-center h-full">
