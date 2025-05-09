@@ -25,11 +25,6 @@ export const usePreventZoom = () => {
     const metaViewport = document.createElement('meta');
     metaViewport.name = 'viewport';
     metaViewport.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
-
-    document.head.appendChild(metaViewport);
-
-    return () => {
-      document.head.removeChild(metaViewport);
-    };
+    document?.head.appendChild(metaViewport);
   }, []);
 };
