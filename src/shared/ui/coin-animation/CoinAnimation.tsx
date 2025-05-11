@@ -127,16 +127,16 @@ const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-contai
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				scale: animationState !== 'start-animation' ? 3.55 : 2.05
+				scale: animationState !== 'start-animation' ? 1 : 0.5
 			}}
-			className={'transition-all duration-[0.5s]'}
+			className={'transition-all duration-[0.5s] relative'}
 		>
 			<div
 				id={containerId}
 				ref={containerRef}
-				style={{ width: '100%', height: '50vw' }}
+				style={{ width: '90vh', height: '90vh' }}
 				onClick={startAnimation}
-				className='transition-all active:scale-95'
+				className='transition-all active:scale-95 absolute translate-y-[-45vh]'
 			/>
 		</div>
 	)
