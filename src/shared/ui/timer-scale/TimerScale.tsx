@@ -1,9 +1,9 @@
 'use client'
-import { setCountGame, useAppDispatch, useAppSelector } from "@/views/store";
+import { setCountGame, timeOver, useAppDispatch, useAppSelector } from "@/views/store";
 import { useEffect, useState } from "react";
 
 export const TimerScale = () => {
-  const totalTime = 20
+  const totalTime = 5
   const dispatch = useAppDispatch()
   const { gameIsStarted, countGame, statusGame } = useAppSelector(state => state.main.game)
 
@@ -11,11 +11,11 @@ export const TimerScale = () => {
   const percentage = (remainingTime / totalTime) * 100;
   
   const handleTimeOver = () => {
-    // code time over
+    dispatch(timeOver())
   }
 
   useEffect(() => {
-    if (remainingTime === 0 || !gameIsStarted) return;
+    if (!gameIsStarted) return;
 
     const interval = setInterval(() => {
       setRemainingTime((prevTime) => {

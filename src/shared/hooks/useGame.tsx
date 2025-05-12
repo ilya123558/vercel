@@ -7,7 +7,7 @@ import { useTossCoinMutation } from "@/entities/users/api/users.api";
 
 export const useGame = () => {
   const dispatch = useAppDispatch()
-  const { gameIsStarted, statusGame, coinSide, winSide, countGame, isCompiled } = useAppSelector(state => state.main.game)
+  const { gameIsStarted, statusGame, coinSide, winSide, countGame, isCompiled, timeIsOver } = useAppSelector(state => state.main.game)
   const { user } = useAppSelector(state => state.main)
   
   const [tossCoin, { data: toss }] = useTossCoinMutation()
@@ -22,7 +22,7 @@ export const useGame = () => {
       dispatch(nextGame())
     }
   }
-  
+
   // Начать игру
   const handleStartGame = () => {
     if(!user) return false
@@ -37,18 +37,21 @@ export const useGame = () => {
     if(!gameIsStarted) {
       dispatch(startGame())
     }else{
+      if(timeIsOver) return false
       handleNextGame()
     }
 
     return true
   }
 
+  // Выбрать вариант
+  const handleSelectVariant = (value: CoinSide) => {
+    dispatch(setCoinSide(value))
+  }
+
   // Проверка результата игры  
   useEffect(() => {
     if(toss) {      
-      dispatch(setEnergyPercent(toss.energyPercent))
-      dispatch(setTossCount(toss.tossCount))
-
       // Записываем выигрышную сторону
       if(toss.guessed) {
         dispatch(setWinSide(coinSide))
@@ -65,10 +68,6 @@ export const useGame = () => {
     }
   }, [gameIsStarted, coinSide])
 
-  const handleSelectVariant = (value: CoinSide) => {
-    dispatch(setCoinSide(value))
-  }
-
   return {
     gameIsStarted, 
     statusGame, 
@@ -79,6 +78,7 @@ export const useGame = () => {
     isCompiled,
     handleNextGame,
     handleStartGame,
-    handleSelectVariant
+    handleSelectVariant,
+    timeIsOver
   }
 };

@@ -3,12 +3,13 @@ import { GameStatusInfo } from "@/features/game-status-info/GameStatusInfo";
 import { SelectVariant } from "@/features/select-variant/SelectVariant";
 import { useEffect, useRef, useState } from "react";
 import { CoinContent } from "@/features/coin-content/CoinContent";
-import { resetGame, useAppDispatch } from "@/views/store";
+import { resetGame, useAppDispatch, useAppSelector } from "@/views/store";
 
 export const Game = () => {
   const dispatch = useAppDispatch()
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [availableHeight, setAvailableHeight] = useState(0);
+  const { autoBotToggle } = useAppSelector(state => state.main.autoBot)
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +33,7 @@ export const Game = () => {
   }, [])
 
   return (
-    <div ref={containerRef} className="">
+    <div ref={containerRef} className={autoBotToggle ? 'pointer-events-none' : ''}>
       <div style={{height: `calc(${availableHeight}px - 13vw)`, opacity: availableHeight ? 1 : 0}} className="flex flex-col justify-end absolute w-full overflow-hidden">
         <GameStatusInfo />
         <CoinContent />

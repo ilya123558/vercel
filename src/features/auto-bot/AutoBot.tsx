@@ -1,15 +1,24 @@
 'use client'
 import { Toggle } from "@/shared/ui/toggle/Toggle";
+import { setAutoBotToggle, setAutoBuyEnergyToggle, useAppDispatch, useAppSelector } from "@/views/store";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export const AutoBot = () => {
+  const dispatch = useAppDispatch()
+  const {autoBotToggle, autoBuyEnergyToggle, autoBotCount, autoBotTotalCount} = useAppSelector(state => state.main.autoBot)
   const [openBooster, setOpenBooster] = useState(false)
   const [filterIsOpen, setfilterIsOpen] = useState(false)
-  const [autoBotToggle, setAutoBotToggle] = useState(false)
-  const [autoBuyEnergyToggle, setAutoBuyEnergyToggle] = useState(false)
 
   const ref = useRef<HTMLDivElement>(null);
+
+  const handleAutoBotToggle = (value: boolean) => {
+    dispatch(setAutoBotToggle(value))
+  } 
+
+  const handleAutoBuyEnergyToggle = (value: boolean) => {
+    dispatch(setAutoBuyEnergyToggle(value))
+  } 
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,10 +52,10 @@ export const AutoBot = () => {
           </div>
           <div className="">
             <h3 className="fs-13">Auto Bot</h3>
-            <p className="w-140px fs-10 opacity-[0.5]">Автоподкидывания 12/30</p>
+            <p className="w-140px fs-10 opacity-[0.5]">Автоподкидывания {autoBotCount}/{autoBotTotalCount}</p>
           </div>
           <div className="flex items-center gap-[1.33vw]">
-            <Toggle value={autoBotToggle} setValue={setAutoBotToggle} />
+            <Toggle value={autoBotToggle} setValue={handleAutoBotToggle} />
             <button onClick={() => setfilterIsOpen(!filterIsOpen)}>
               <svg className="w-24px h-23px" width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12.1119 7.19434H21.3119" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -59,10 +68,10 @@ export const AutoBot = () => {
             </button>
           </div>
         </div>
-        {(autoBotToggle && filterIsOpen) && (
+        {filterIsOpen && (
           <div className="p-[1vw_9vw_3vw_4vw] flex justify-between items-center">
             <p className="fs-12 font-medium w-160px">Автопополнение если энергия ниже 75%</p>
-            <Toggle value={autoBuyEnergyToggle} setValue={setAutoBuyEnergyToggle} />
+            <Toggle value={autoBuyEnergyToggle} setValue={handleAutoBuyEnergyToggle} />
           </div>
         )}
       </div>

@@ -8,13 +8,13 @@ import { motion } from 'framer-motion';
 import React, { PropsWithChildren } from 'react';
 
 export const Header = ({children}: PropsWithChildren) => {
-  const { user } = useAppSelector(state => state.main)
+  const { user } = useAppSelector(state => state.main) 
 
-  const handleBuyСrystals = () => {
-    localStorage.setItem("accessToken", user?.accessToken || '');
-    localStorage.setItem("refreshToken", user?.refreshToken || '');
-    navigator.clipboard.writeText(JSON.stringify(user))
-  }
+  // const handleBuyСrystals = () => {
+  //   localStorage.setItem("accessToken", user?.accessToken || '');
+  //   localStorage.setItem("refreshToken", user?.refreshToken || '');
+  //   navigator.clipboard.writeText(JSON.stringify(user))
+  // }
   
   if(!user) {
     return <></>
@@ -25,13 +25,13 @@ export const Header = ({children}: PropsWithChildren) => {
       <div className='flex items-center justify-between'>
         <div className="flex items-center gap-[6px]">
           <Crystal value={user.balance} />
-          <button onClick={handleBuyСrystals}>
+          {/* <button onClick={handleBuyСrystals}>
             <svg className='min-w-19px min-h-18px' width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="9.5" cy="9" r="9" fill="white" fillOpacity="0.2"/>
               <path d="M9.5 4.5V13.5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
               <path d="M14 9L5 9" stroke="white" strokeWidth="2" strokeLinecap="round"/>
             </svg>
-          </button>
+          </button> */}
         </div>
         <InfoBlock title='lvl' value={user.level} />
         <InfoBlock title='Tasks' value={user.availableTasksCount} />

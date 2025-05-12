@@ -1,9 +1,8 @@
 'use client'
 import { ModalContentWrapper } from '@/shared/ui/wrappers/modal-content-wrapper/ModalContentWrapper';
 import { DailyAdmissionContent } from '../daily-admission-content/DailyAdmissionContent';
-import { IClaimDailyRewardResponse } from '@/entities/users/types/claimDailyReward';
-import { useState } from 'react';
-import { useClaimDailyRewardQuery } from '@/entities/users/api/users.api';
+import { useDailyRewardInfoQuery, useLazyClaimDailyRewardQuery } from '@/entities/users/api/users.api';
+import { setBalance, useAppDispatch, useAppSelector } from '@/views/store';
 
 interface IProps {
   isOpen: boolean
@@ -11,20 +10,36 @@ interface IProps {
 }
 
 export const DailyAdmissionModal = ({isOpen, setIsOpen}: IProps) => {
-  const { data: claimDailyRewardData } = useClaimDailyRewardQuery()
+  const dispatch = useAppDispatch()
+  const { user } = useAppSelector(state => state.main)
+  const { data: dailyRewardInfoData } = useDailyRewardInfoQuery()
+  const [ claimDailyReward ] = useLazyClaimDailyRewardQuery()
 
-  const handleClick = () => {
-    // забрать дневную награду
+  const handleClick = async () => {
+    if(!dailyRewardInfoData || dailyRewardInfoData.claimedToday) {
+      setIsOpen(false)
+      return
+    }
+    
+    const response = await claimDailyReward()
+
+    if(response.data && user) {
+      const value = dailyRewardInfoData.dayRewards[dailyRewardInfoData.activeDay - 1]
+      dispatch(setBalance(user.balance + value))
+    }
+
     setIsOpen(false)
   }
+
+  if(!dailyRewardInfoData) return <></>
 
   return (
     <ModalContentWrapper
       title="Ежедневный вход"
       subTitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      imageComponent={claimDailyRewardData ? <DailyAdmissionContent {...claimDailyRewardData} /> : <></>}
+      imageComponent={dailyRewardInfoData ? <DailyAdmissionContent {...dailyRewardInfoData} /> : <></>}
       onClick={handleClick}
-      textButton='Забрать'
+      textButton={dailyRewardInfoData?.claimedToday ? 'Закрыть' : 'Забрать'}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     />

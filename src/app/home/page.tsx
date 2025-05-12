@@ -4,9 +4,11 @@ import { Container } from "@/shared/ui/container/Container";
 import { Checklist } from "@/widgets/checklist/Checklist";
 import { Game } from "@/widgets/game/Game";
 import { Header } from "@/widgets/header/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
+  const [disablePage, setDisablePage] = useState(false)
+
   useEffect(() => {
     const body = document.body;
     const backgroundUrl = '/images/home/bg.png';
@@ -24,8 +26,20 @@ export default function Page() {
     };
   }, []);
 
+  useEffect(() => {
+    const prevPage = localStorage.getItem('prev-page')
+
+    if(prevPage && prevPage === '/') {
+      setDisablePage(true)
+      setTimeout(() => {
+        setDisablePage(false)
+        localStorage.setItem('prev-page', '')
+      }, 2000)
+    }
+  }, [])
+
   return ( 
-    <section className="">
+    <section className={disablePage ? 'pointer-events-none': ''}>
       <Container>
         <Header>
           <GameInfo/>

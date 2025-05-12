@@ -13,6 +13,7 @@ export const useNotification = () => {
       | 'activeted success'
       | 'upgrade success'
       | 'upgrade incorrect'
+      | 'auto-tipping is over'
   ) => {
     const map: Record<typeof type, { message: string; severity: AlertColor }> = {
       'energy over': {
@@ -42,6 +43,10 @@ export const useNotification = () => {
       "upgrade incorrect": {
         message: 'Недопустимое значение',
         severity: 'error',
+      },
+      "auto-tipping is over": {
+        message: 'Автопопытки закончились',
+        severity: 'info',
       }
     };
 

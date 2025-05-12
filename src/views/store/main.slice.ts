@@ -6,6 +6,7 @@ interface IInitialState {
   user: IUser | null;
   game: {
     gameIsStarted: boolean;
+    timeIsOver: boolean
     statusGame: "win" | "defeat" | null;
     coinSide: CoinSide | null;
     countGame: number;
@@ -14,6 +15,12 @@ interface IInitialState {
   };
   meta: {
     pumpingPoints: number
+  }
+  autoBot: {
+    autoBotToggle: boolean
+    autoBuyEnergyToggle: boolean
+    autoBotCount: number
+    autoBotTotalCount: number
   }
 }
 
@@ -38,6 +45,7 @@ const initialState: IInitialState = {
   user: null,
   game: {
     gameIsStarted: false,
+    timeIsOver: false,
     statusGame: null,
     coinSide: null,
     countGame: 1,
@@ -46,6 +54,12 @@ const initialState: IInitialState = {
   },
   meta: {
     pumpingPoints: 30
+  },
+  autoBot: {
+    autoBotToggle: false,
+    autoBuyEnergyToggle: false,
+    autoBotCount: 12,
+    autoBotTotalCount: 30,
   }
 };
 
@@ -53,25 +67,50 @@ const mainSlice = createSlice({
   name: "mainSlice",
   initialState: initialState,
   reducers: {
+    setAutoBotToggle: (state, action: PayloadAction<IInitialState["autoBot"]['autoBotToggle']>) => {
+      state.autoBot.autoBotToggle = action.payload
+    },
+    setAutoBuyEnergyToggle: (state, action: PayloadAction<IInitialState["autoBot"]['autoBuyEnergyToggle']>) => {
+      state.autoBot.autoBuyEnergyToggle = action.payload
+    },
+    setAutoBotCount: (state, action: PayloadAction<IInitialState["autoBot"]['autoBotCount']>) => {
+      state.autoBot.autoBotCount = action.payload
+    },
+    autoBotCountDec: (state) => {
+      state.autoBot.autoBotCount = state.autoBot.autoBotCount - 1
+    },
+    
     setUser: (state, action: PayloadAction<IInitialState["user"]>) => {
       state.user = action.payload
     },
 
     setEnergyPercent: (state, action: PayloadAction<number>) => {
       if (state.user) {
-        state.user = { ...state.user, energyPercent: action.payload };
+        state.user.energyPercent = action.payload
+      }
+    },
+
+    setBalance: (state, action: PayloadAction<number>) => {
+      if (state.user) {
+        state.user.balance = action.payload
       }
     },
 
     setTossCount: (state, action: PayloadAction<number>) => {
       if (state.user) {
-        state.user = { ...state.user, tossCount: action.payload };
+        state.user.tossCount = action.payload
       }
     },
 
     startGame: (state) => {
       state.game.gameIsStarted = true;
+      state.game.timeIsOver = false;
+      if(state.user) {
+        state.user.energyPercent -= 1
+        state.user.tossCount -= 1
+      }
     },
+    
     stopGame: (state) => {
       state.game.gameIsStarted = false;
     },
@@ -85,6 +124,7 @@ const mainSlice = createSlice({
       state,
       action: PayloadAction<IInitialState["game"]["coinSide"]>
     ) => {
+      state.game.winSide = null;
       state.game.coinSide = action.payload;
     },
     setCountGame: (
@@ -115,12 +155,22 @@ const mainSlice = createSlice({
     },
 
     resetGame: (state) => {
+      if(!state.game.coinSide && state.game.gameIsStarted) {
+        if(state.user) {
+          state.user.energyPercent += 1
+          state.user.tossCount += 1
+        }
+      }
+
+      state.game.timeIsOver = false;
       state.game.coinSide = null;
       state.game.countGame = 1;
       state.game.gameIsStarted = false;
       state.game.statusGame = null;
       state.game.isCompiled = true;
       state.game.winSide = null;
+      state.autoBot.autoBotToggle = false
+      state.autoBot.autoBuyEnergyToggle = false
     },
 
     nextGame: (state) => {
@@ -128,18 +178,36 @@ const mainSlice = createSlice({
       state.game.coinSide = null;
       state.game.countGame = state.game.countGame + 1;
       state.game.statusGame = null;
+      if(state.user) {
+        state.user.energyPercent -= 1
+        state.user.tossCount -= 1
+      }
     },
 
     timeOver: (state) => {
+      if(state.game.timeIsOver) return;
+      state.game.timeIsOver = true;
       state.game.coinSide = null;
-      state.game.statusGame = "defeat";
+      state.game.gameIsStarted = false;
+      state.game.statusGame = null;
+      state.game.isCompiled = true;
+      state.game.winSide = null;
+      if(state.user) {
+        state.user.energyPercent += 1
+        state.user.tossCount += 1
+      }
     },
   },
 });
 
 export const {
+  setAutoBotToggle,
+  setAutoBuyEnergyToggle,
+  setAutoBotCount,
+  autoBotCountDec,
   setUser,
   setEnergyPercent,
+  setBalance,
   setTossCount,
   setCoinSide,
   setCountGame,

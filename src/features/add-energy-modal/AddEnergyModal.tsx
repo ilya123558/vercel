@@ -1,9 +1,8 @@
 'use client'
-import { useUpdateEnergyMutation } from '@/entities/users/api/users.api';
+import { useEnergyRefillInfoQuery, useEnergyRefillMutation, useUpdateEnergyMutation } from '@/entities/users/api/users.api';
 import { ImageWithSkeleton } from '@/shared/ui/image-with-skeleton/ImageWithSkeleton';
-import { ModalImage } from '@/shared/ui/modal-image/ModalImage';
 import { ModalContentWrapper } from '@/shared/ui/wrappers/modal-content-wrapper/ModalContentWrapper';
-import { setEnergyPercent, useAppDispatch } from '@/views/store';
+import { setEnergyPercent, useAppDispatch, useAppSelector } from '@/views/store';
 import { useEffect, useState } from 'react';
 
 interface IProps {
@@ -12,18 +11,68 @@ interface IProps {
 }
 
 export const AddEnergyModal = ({isOpen, setIsOpen}: IProps) => {
-  const [toggle, setToggle] = useState(false)
   const dispatch = useAppDispatch()
+  const { autoBuyEnergyToggle } = useAppSelector(state => state.main.autoBot)
+  const { isCompiled } = useAppSelector(state => state.main.game)
+  const { user } = useAppSelector(state => state.main)
 
-  const handleClick = () => {
+  const [toggle, setToggle] = useState(false)
+  const [hidden, setHidden] = useState(true)
+  const { data: energyRefillInfoData } = useEnergyRefillInfoQuery()
+  const [energyRefill] = useEnergyRefillMutation()
 
+  const handleClick = async() => {
+    const data = await energyRefill()
+
+    if(data.data) {
+      dispatch(setEnergyPercent(data.data.newEnergy))
+    }
+
+    setIsOpen(false)
   }
+
+  useEffect(() => {
+    const energyHidden: boolean = JSON.parse(localStorage.getItem('energy-hidden') || 'false')
+
+    if(energyHidden && isOpen) {
+      setHidden(true)
+      handleClick()
+    }
+    else{
+      setHidden(false)
+    }
+
+  }, [isOpen])
+
+  useEffect(() => {
+    if(toggle) {
+      localStorage.setItem('energy-hidden', JSON.stringify(true))
+    }
+  }, [toggle])
+
+  useEffect(() => {
+    if(!user || !isCompiled) return 
+
+    if(autoBuyEnergyToggle && user.energyPercent) {
+      if(user.energyPercent === 75) {
+        handleClick()
+      }
+    }
+  }, [autoBuyEnergyToggle, user, isCompiled])
+
+  if(hidden || !energyRefillInfoData) return <></>
 
   return (
     <ModalContentWrapper
-      title="+10 Энергии"
-      subTitle="Приобрести 10 единиц энергии"
-      withCloseBtn
+      title={energyRefillInfoData.energyPercent === 0 
+        ? 'Покупка энергии'
+        : `+${energyRefillInfoData.energyPercent} Энергии`
+      }
+      subTitle={energyRefillInfoData.energyPercent === 0 
+        ? undefined 
+        : `Приобрести ${energyRefillInfoData.energyPercent} единиц энергии`
+      }
+      withCloseBtn={energyRefillInfoData.energyPercent !== 0}
       imageComponent={(
         <div>
           <div className='w-full p-[0vw_14.4vw] flex items-center justify-center'>
@@ -57,8 +106,11 @@ export const AddEnergyModal = ({isOpen, setIsOpen}: IProps) => {
         </div>
       )}
       onClick={handleClick}
-      textButton='Приобрести'
-      countValueInButton={20}
+      textButton={energyRefillInfoData.energyPercent === 0 ? 'Закрыть' : 'Приобрести'}
+      countValueInButton={energyRefillInfoData.energyPercent === 0 
+        ? undefined
+        : energyRefillInfoData.costPerUnit * energyRefillInfoData.energyPercent
+      }
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     />

@@ -1,10 +1,11 @@
 'use client'
 import { CoinSide } from '@/entities/general/types/general'
 import { useGame } from '@/shared/hooks/useGame'
-import { completeGame, setWinSide, useAppDispatch, useAppSelector } from '@/views/store'
+import { autoBotCountDec, completeGame, setAutoBotCount, setAutoBotToggle, setWinSide, useAppDispatch, useAppSelector } from '@/views/store'
 import lottie, { AnimationItem } from 'lottie-web'
 import React, { useEffect, useRef, useState } from 'react'
 import './CoinAnimation.scss'
+import { useNotification } from '@/shared/hooks/useNotification'
 
 interface CoinFlipAnimationProps {
 	animationData: any
@@ -14,9 +15,12 @@ interface CoinFlipAnimationProps {
 
 const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-container' }: CoinFlipAnimationProps) => {
 	const dispatch = useAppDispatch()
+	const { autoBotToggle, autoBotCount } = useAppSelector(state => state.main.autoBot)
+	const user = useAppSelector(state => state.main.user)
+	const { handleNotification } = useNotification()
 
 	const [animationState, setAnimationState] = useState<'start-animation' | 'end-animation' | null>(null)
-	const { handleStartGame, coinSide, gameIsStarted, winSide } = useGame()
+	const { handleStartGame, gameIsStarted, winSide, timeIsOver, isCompiled } = useGame()
 
 	const containerRef = useRef<HTMLDivElement>(null)
 	const animationRef = useRef<AnimationItem | null>(null)
@@ -24,6 +28,7 @@ const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-contai
 	const shouldPlayFinalRef = useRef(false)
 	const isRotationLooping = useRef(false)
 	const winSideRef = useRef<CoinSide | null>(null)
+	const autoBotToggleRef = useRef<boolean>(false)
 
 	const handleComplete = () => {
 		const segment = currentSegmentRef.current
@@ -48,30 +53,13 @@ const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-contai
 
 		else if (segment === 'final') {
 			dispatch(completeGame())
+
+			if(autoBotToggleRef.current) {
+				dispatch(autoBotCountDec())
+			}
 		}
 	}
-
-	useEffect(() => {
-		if (!containerRef.current) return
-
-		const anim = lottie.loadAnimation({
-			container: containerRef.current,
-			renderer: 'svg',
-			loop: false,
-			autoplay: false,
-			animationData,
-		})
-
-		animationRef.current = anim
-
-		anim.addEventListener('complete', handleComplete)
-
-		return () => {
-			anim.removeEventListener('complete', handleComplete)
-			anim.destroy()
-		}
-	}, [animationData])
-
+	
 	const playRotationCycle = () => {
 		if (!animationRef.current) return
 		currentSegmentRef.current = 'rotation'
@@ -103,9 +91,30 @@ const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-contai
 			currentSegmentRef.current = 'final'
 			// Если орел [43, 69], решка [70, 96]
 			animationRef.current.playSegments(winSideRef.current === CoinSide.HEADS ? [43, 69] : [70, 96], true)
-			// animationRef.current.playSegments([70, 96], true)
 		}
 	}
+
+	
+	useEffect(() => {
+		if (!containerRef.current) return
+
+		const anim = lottie.loadAnimation({
+			container: containerRef.current,
+			renderer: 'svg',
+			loop: false,
+			autoplay: false,
+			animationData,
+		})
+
+		animationRef.current = anim
+
+		anim.addEventListener('complete', handleComplete)
+
+		return () => {
+			anim.removeEventListener('complete', handleComplete)
+			anim.destroy()
+		}
+	}, [animationData])
 
 	useEffect(() => {
 		winSideRef.current = winSide;
@@ -115,11 +124,55 @@ const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-contai
 		}
 	}, [winSide]);
 
-	// useEffect(() => {
-	// 	if(coinSide) {
-	// 		chooseSide()
-	// 	}
-	// }, [coinSide])
+  useEffect(() => {
+    if (timeIsOver) {
+			currentSegmentRef.current = 'idle';
+			animationRef.current?.playSegments([43, 69], true)
+			setAnimationState('end-animation')
+		}
+  }, [timeIsOver]);
+
+	// Если включен режим автобросков
+	useEffect(() => {
+		if(!user || !isCompiled) return 
+		const { energyPercent, tossCount } = user
+
+		if(autoBotToggle) {
+			if(autoBotCount > 0 && energyPercent > 0 && tossCount > 0) {
+				setTimeout(() => {
+					autoBotToggleRef.current = true
+					startAnimation()
+				}, 1000)
+			}
+			else{
+				autoBotToggleRef.current = false
+				dispatch(setAutoBotToggle(false))
+
+				if(autoBotCount <= 0) {
+					handleNotification('auto-tipping is over')
+					return
+				}
+
+				if(energyPercent <= 0) {
+					handleNotification('energy over')
+					return
+				}
+
+				if(tossCount <= 0) {
+					handleNotification('throw over')
+					return
+				}
+			}
+		}
+	}, [autoBotToggle, autoBotCount, user, isCompiled])
+
+	useEffect(() => {
+		if(autoBotToggle) {
+			autoBotToggleRef.current = true
+		}else{
+			autoBotToggleRef.current = false
+		}
+	}, [autoBotToggle])
 
 	return (
 		<div

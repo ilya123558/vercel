@@ -6,11 +6,10 @@ import { DefaultBtn } from "@/shared/ui/button/DefaultBtn";
 import { DisableBtn } from "@/shared/ui/button/DisableBtn";
 import { Container } from "@/shared/ui/container/Container";
 import { TimerScale } from "@/shared/ui/timer-scale/TimerScale";
+import { useAppSelector } from "@/views/store";
 import { useEffect, useState } from "react";
 
 export const SelectVariant = () => {
-  const [isSelected, setIsSelected] = useState(false)
-
   const { 
     coinSide, 
     gameIsStarted, 
@@ -19,13 +18,9 @@ export const SelectVariant = () => {
     isCompiled,
     handleSelectVariant,
   } = useGame()
-
-  useEffect(() => {
-    if(!isCompiled) {
-      setIsSelected(false)
-    }
-  }, [isCompiled])
-
+  const {autoBotToggle} = useAppSelector(state => state.main.autoBot)
+  const [isSelected, setIsSelected] = useState(false)
+  
   const handleSelectVariantHEADS = () => {
     if(isSelected) return
     setIsSelected(true)
@@ -37,6 +32,23 @@ export const SelectVariant = () => {
     setIsSelected(true)
     handleSelectVariant(CoinSide.TAILS)
   }
+
+  useEffect(() => {
+    if(!isCompiled || gameIsStarted) {
+      setIsSelected(false)
+    }
+  }, [isCompiled, autoBotToggle, gameIsStarted])
+
+  useEffect(() => {
+    if(!isSelected && autoBotToggle) {
+      setTimeout(() => {
+        setIsSelected(true)
+        const randomChoice = Math.random() < 0.5 ? CoinSide.HEADS : CoinSide.TAILS;
+        handleSelectVariant(randomChoice)
+      }, gameIsStarted ? 2000 : 3000)
+    }
+
+  }, [isSelected, autoBotToggle, gameIsStarted])
 
   if(!gameIsStarted) {
     return <div className="max-h-[96px] h-full w-full bg-transparent"></div>

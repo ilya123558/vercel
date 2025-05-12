@@ -20,6 +20,7 @@ export default function Page() {
         if (init_data) {
           const data = await new LoginApiClient().loginByInitData(init_data);
           dispatch(setUser(data.user));
+          localStorage.setItem('prev-page', '/')
           router.push('/home');
 
         } else {
