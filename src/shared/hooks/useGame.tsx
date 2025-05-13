@@ -53,6 +53,7 @@ export const useGame = () => {
   useEffect(() => {
     if(toss) {      
       // Записываем выигрышную сторону
+      alert(toss.reward)
       if(toss.guessed) {
         dispatch(setWinSide(coinSide))
       }else{

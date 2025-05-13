@@ -2,7 +2,7 @@
 import { useEnergyRefillInfoQuery, useEnergyRefillMutation, useUpdateEnergyMutation } from '@/entities/users/api/users.api';
 import { ImageWithSkeleton } from '@/shared/ui/image-with-skeleton/ImageWithSkeleton';
 import { ModalContentWrapper } from '@/shared/ui/wrappers/modal-content-wrapper/ModalContentWrapper';
-import { setEnergyPercent, useAppDispatch, useAppSelector } from '@/views/store';
+import { setBalance, setEnergyPercent, useAppDispatch, useAppSelector } from '@/views/store';
 import { useEffect, useState } from 'react';
 
 interface IProps {
@@ -24,8 +24,8 @@ export const AddEnergyModal = ({isOpen, setIsOpen}: IProps) => {
   const handleClick = async() => {
     const data = await energyRefill()
 
-    if(data.data) {
-      alert(data.data.cost)
+    if(data.data && user) {
+      dispatch(setBalance(user.balance - data.data.cost))
       dispatch(setEnergyPercent(data.data.newEnergy))
     }
 
