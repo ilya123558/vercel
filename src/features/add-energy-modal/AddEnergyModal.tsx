@@ -25,6 +25,7 @@ export const AddEnergyModal = ({isOpen, setIsOpen}: IProps) => {
     const data = await energyRefill()
 
     if(data.data) {
+      alert(data.data.cost)
       dispatch(setEnergyPercent(data.data.newEnergy))
     }
 
