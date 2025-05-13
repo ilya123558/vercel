@@ -14,6 +14,7 @@ export interface IUser {
   referralLink: string
   accessToken: string
   refreshToken: string
+  background: string
 }
 
 export interface IReferralUser extends Pick<IUser, 'id' | 'fullName' | 'photo' | 'level'> {}

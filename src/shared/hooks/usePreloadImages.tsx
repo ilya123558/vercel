@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 
 const imageUrlsData: string[] = [
-  '/images/home/bg.png'
+  // '/images/home/bg.png',
+  '/images/coin/coin-back.svg',
+  '/images/coin/coin-front.png',
 ];
 
 export const usePreloadImages = (imageUrls?: string[]) => {

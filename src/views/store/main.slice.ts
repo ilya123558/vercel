@@ -84,6 +84,12 @@ const mainSlice = createSlice({
       state.user = action.payload
     },
 
+    setUserBackground: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.background = action.payload
+      }
+    },
+
     setEnergyPercent: (state, action: PayloadAction<number>) => {
       if (state.user) {
         state.user.energyPercent = action.payload
@@ -206,6 +212,7 @@ export const {
   setAutoBotCount,
   autoBotCountDec,
   setUser,
+  setUserBackground,
   setEnergyPercent,
   setBalance,
   setTossCount,

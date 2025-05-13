@@ -24,10 +24,7 @@ export const CustomizeList = ({list}: IProps) => {
 
   return (
     <ListWrapper className="mt-[4vw]">
-      {activeItem && (
-        <BuyModal isOpen={openModal} setIsOpen={setOpenModal} {...activeItem}
-        />
-      )}
+      {activeItem && <BuyModal isOpen={openModal} setIsOpen={setOpenModal} {...activeItem} />}
       <ul className="grid grid-cols-2 gap-[3px]">
         {list.map((customization, index) => (
           <li key={index} onClick={() => handleClick(customization)} className="active:scale-[0.98] transition-all will-change-transform p-[1px]">

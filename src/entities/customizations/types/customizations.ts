@@ -6,8 +6,9 @@ export interface ICustomization {
   title: string
   photo: string
   price: number
-  isActive: boolean,
-  isBought: boolean,
+  source: string
+  isActive: boolean
+  isBought: boolean
   winstreakBonus?: number
   tossCountBonus?: number
 }
