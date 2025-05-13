@@ -16,6 +16,7 @@ export default function Page() {
     const body = document.body;
     const backgroundUrl = user.background;
 
+    alert(backgroundUrl)
     const img = new Image();
     img.src = backgroundUrl;
     img.onload = () => {
