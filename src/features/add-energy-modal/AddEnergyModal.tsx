@@ -18,7 +18,7 @@ export const AddEnergyModal = ({isOpen, setIsOpen}: IProps) => {
 
   const [toggle, setToggle] = useState(false)
   const [hidden, setHidden] = useState(true)
-  const { data: energyRefillInfoData } = useEnergyRefillInfoQuery()
+  const { data: energyRefillInfoData, refetch } = useEnergyRefillInfoQuery()
   const [energyRefill] = useEnergyRefillMutation()
 
   const handleClick = async() => {
@@ -33,6 +33,7 @@ export const AddEnergyModal = ({isOpen, setIsOpen}: IProps) => {
 
   useEffect(() => {
     const energyHidden: boolean = JSON.parse(localStorage.getItem('energy-hidden') || 'false')
+    refetch()
 
     if(energyHidden && isOpen) {
       setHidden(true)
