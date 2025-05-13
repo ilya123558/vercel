@@ -10,11 +10,11 @@ import React, { PropsWithChildren } from 'react';
 export const Header = ({children}: PropsWithChildren) => {
   const { user } = useAppSelector(state => state.main) 
 
-  // const handleBuyСrystals = () => {
-  //   localStorage.setItem("accessToken", user?.accessToken || '');
-  //   localStorage.setItem("refreshToken", user?.refreshToken || '');
-  //   navigator.clipboard.writeText(JSON.stringify(user))
-  // }
+  const handleClick = () => {
+    localStorage.setItem("accessToken", user?.accessToken || '');
+    localStorage.setItem("refreshToken", user?.refreshToken || '');
+    navigator.clipboard.writeText(JSON.stringify(user?.accessToken))
+  }
   
   if(!user) {
     return <></>
@@ -23,7 +23,7 @@ export const Header = ({children}: PropsWithChildren) => {
   return (
     <motion.header {...animationLeft} id='header' className="mt-[6px] flex flex-col gap-[2.67vw] p-[4vw_4.67vw] bg-gradient-block rounded-[16px] border-b-[1px] border-[#464D6854] will-change-transform">
       <div className='flex items-center justify-between'>
-        <div className="flex items-center gap-[6px]">
+        <div onClick={handleClick} className="flex items-center gap-[6px]">
           <Crystal value={user.balance} />
           {/* <button onClick={handleBuyСrystals}>
             <svg className='min-w-19px min-h-18px' width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
