@@ -45,10 +45,10 @@ export const SelectVariant = () => {
         setIsSelected(true)
         const randomChoice = Math.random() < 0.5 ? CoinSide.HEADS : CoinSide.TAILS;
         handleSelectVariant(randomChoice)
-      }, gameIsStarted ? 2000 : 3000)
+      }, 2000)
     }
 
-  }, [isSelected, autoBotToggle, gameIsStarted])
+  }, [isSelected, autoBotToggle])
 
   if(!gameIsStarted) {
     return <div className="max-h-[96px] h-full w-full bg-transparent"></div>

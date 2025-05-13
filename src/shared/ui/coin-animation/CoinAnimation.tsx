@@ -142,7 +142,7 @@ const CoinFlipAnimation = ({ animationData, containerId = 'coin-animation-contai
 				setTimeout(() => {
 					autoBotToggleRef.current = true
 					startAnimation()
-				}, 1000)
+				}, 2000)
 			}
 			else{
 				autoBotToggleRef.current = false

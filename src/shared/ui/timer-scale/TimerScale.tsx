@@ -3,7 +3,7 @@ import { setCountGame, timeOver, useAppDispatch, useAppSelector } from "@/views/
 import { useEffect, useState } from "react";
 
 export const TimerScale = () => {
-  const totalTime = 5
+  const totalTime = 20
   const dispatch = useAppDispatch()
   const { gameIsStarted, countGame, statusGame } = useAppSelector(state => state.main.game)
 
