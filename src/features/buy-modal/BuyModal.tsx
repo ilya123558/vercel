@@ -28,14 +28,13 @@ export const BuyModal = ({ isOpen, setIsOpen, title, id, price, isActive, photo,
   }
 
   useEffect(() => {
-    if(buySuccess && activateData) {
+    if(buySuccess) {
       setIsOpen(false)
-      alert(buySuccess)
-      dispatch(setUserBackground(activateData.customization.photo))
       handleNotification("buy success")
     }
-    if(activateSuccess) {
+    if(activateSuccess && activateData) {
       setIsOpen(false)
+      dispatch(setUserBackground(activateData.customization.photo))
       handleNotification("activeted success")
     }
   }, [buySuccess, activateSuccess, activateData])
