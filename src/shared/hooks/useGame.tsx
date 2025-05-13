@@ -1,4 +1,4 @@
-import { nextGame, resetGame, setCoinSide, startGame, setEnergyPercent, setStatusGame, setTossCount, useAppDispatch, useAppSelector, setWinSide } from "@/views/store";
+import { nextGame, resetGame, setCoinSide, startGame, setEnergyPercent, setStatusGame, setTossCount, useAppDispatch, useAppSelector, setWinSide, setBalance } from "@/views/store";
 import { useNotification } from "./useNotification";
 import { CoinSide } from "@/entities/general/types/general";
 import { useEffect, useState } from "react";
@@ -51,12 +51,13 @@ export const useGame = () => {
 
   // Проверка результата игры  
   useEffect(() => {
-    if(toss) {      
+    if(toss && user) {      
       // Записываем выигрышную сторону
-      alert(toss.reward)
       if(toss.guessed) {
+        dispatch(setBalance(user.balance + toss.reward))
         dispatch(setWinSide(coinSide))
       }else{
+        dispatch(setBalance(user.balance + toss.reward))
         dispatch(setWinSide(coinSide === CoinSide.HEADS ? CoinSide.TAILS: CoinSide.HEADS))
       } 
     }
