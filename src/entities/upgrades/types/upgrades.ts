@@ -17,6 +17,7 @@ export interface IGetUpgradesResponse extends IPageResponse {
   mainLevelWinBonus: number
   mainLevelTossCount: number
   mainLevelUpgradeCost: number
+  totalPoints: number
   otherUpgrades: IUpgrade[];
 }
 

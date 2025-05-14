@@ -10,6 +10,7 @@ export interface IUser {
   availableTasksCount: number
   energyPercent: number
   tossCount: number
+  autoBotTossCount: number
   maxTossCount: number
   referralLink: string
   accessToken: string

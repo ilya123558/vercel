@@ -1,12 +1,11 @@
 'use client'
-import { Container } from "@/shared/ui/container/Container";
 import Image from "next/image";
+import { Container } from "@/shared/ui/container/Container";
 import { motion } from "framer-motion";
 import { animationRight } from "@/shared/const/animation";
 import { AutoBot } from "@/features/auto-bot/AutoBot";
-import { useClaimDailyRewardQuery, useDailyRewardInfoQuery, useLazyDailyRewardInfoQuery } from "@/entities/users/api/users.api";
+import { useLazyDailyRewardInfoQuery } from "@/entities/users/api/users.api";
 import { DailyAdmissionModal } from "@/features/daily-admission-modal/DailyAdmissionModal";
-import { EnergyLimitModal } from "@/features/energy-limit-modal/EnergyLimitModal";
 import { useEffect, useState } from "react";
 import { AddEnergyModal } from "@/features/add-energy-modal/AddEnergyModal";
 

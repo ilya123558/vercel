@@ -19,7 +19,7 @@ export default function Page() {
 
   useEffect(() => {
     if(data) {
-      // dispatch(setPoints(data.points))
+      dispatch(setPoints(data.totalPoints))
     }
   }, [data])
 

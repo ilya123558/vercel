@@ -58,8 +58,8 @@ const initialState: IInitialState = {
   autoBot: {
     autoBotToggle: false,
     autoBuyEnergyToggle: false,
-    autoBotCount: 12,
-    autoBotTotalCount: 30,
+    autoBotCount: 0,
+    autoBotTotalCount: 0,
   }
 };
 
@@ -81,6 +81,11 @@ const mainSlice = createSlice({
     },
     
     setUser: (state, action: PayloadAction<IInitialState["user"]>) => {
+      if(action.payload) {
+        state.autoBot.autoBotCount = action.payload.tossCount
+        state.autoBot.autoBotTotalCount = action.payload.autoBotTossCount
+      }
+
       state.user = action.payload
     },
 
