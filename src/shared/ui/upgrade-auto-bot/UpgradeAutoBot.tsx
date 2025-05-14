@@ -5,7 +5,7 @@ import { BlockWrapper } from "../wrappers/block-wrapper/BlockWrapper";
 import { Button } from "../button/Button";
 import { Crystal } from "../crystal/Crystal";
 import { IGetUpgradesResponse } from "@/entities/upgrades/types/upgrades";
-import { setBalance, useAppDispatch, useAppSelector } from "@/views/store";
+import { setBalance, setTossCount, useAppDispatch, useAppSelector } from "@/views/store";
 import { useBuyUpgradeMutation } from "@/entities/upgrades/api/upgrades.api";
 import { useEffect } from "react";
 import { useNotification } from "@/shared/hooks/useNotification";
@@ -30,6 +30,7 @@ export const UpgradeAutoBot = ({autobotPurchaseCost}: IGetUpgradesResponse) => {
     if(isSuccess){
       if(data.success) {
         dispatch(setBalance((user?.balance || 0) - autobotPurchaseCost))
+        dispatch(setTossCount(100))
         handleNotification("upgrade success")
       }else{
         handleNotification("balance error")
