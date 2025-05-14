@@ -3,6 +3,7 @@ import { ModalContentWrapper } from '@/shared/ui/wrappers/modal-content-wrapper/
 import { DailyAdmissionContent } from '../daily-admission-content/DailyAdmissionContent';
 import { useDailyRewardInfoQuery, useLazyClaimDailyRewardQuery } from '@/entities/users/api/users.api';
 import { setBalance, useAppDispatch, useAppSelector } from '@/views/store';
+import { useEffect } from 'react';
 
 interface IProps {
   isOpen: boolean
@@ -12,7 +13,7 @@ interface IProps {
 export const DailyAdmissionModal = ({isOpen, setIsOpen}: IProps) => {
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(state => state.main)
-  const { data: dailyRewardInfoData } = useDailyRewardInfoQuery()
+  const { data: dailyRewardInfoData, refetch } = useDailyRewardInfoQuery()
   const [ claimDailyReward ] = useLazyClaimDailyRewardQuery()
 
   const handleClick = async () => {
@@ -30,6 +31,10 @@ export const DailyAdmissionModal = ({isOpen, setIsOpen}: IProps) => {
 
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    refetch()
+  }, [isOpen])
 
   if(!dailyRewardInfoData) return <></>
 

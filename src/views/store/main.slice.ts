@@ -14,7 +14,7 @@ interface IInitialState {
     isCompiled: boolean
   };
   meta: {
-    pumpingPoints: number
+    points: number
   }
   autoBot: {
     autoBotToggle: boolean
@@ -53,7 +53,7 @@ const initialState: IInitialState = {
     isCompiled: true
   },
   meta: {
-    pumpingPoints: 30
+    points: 30
   },
   autoBot: {
     autoBotToggle: false,
@@ -143,11 +143,8 @@ const mainSlice = createSlice({
       state.game.winSide = action.payload;
     },
 
-    setPumpingPoints: (
-      state,
-      action: PayloadAction<IInitialState["meta"]["pumpingPoints"]>
-    ) => {
-      state.meta.pumpingPoints = action.payload;
+    setPoints: (state, action: PayloadAction<IInitialState["meta"]["points"]>) => {
+      state.meta.points = action.payload;
     },
 
     completeGame: (state) => {
@@ -225,7 +222,7 @@ export const {
   resetGame,
   nextGame,
   timeOver,
-  setPumpingPoints,
+  setPoints,
   completeGame
 } = mainSlice.actions;
 export const mainReducer = mainSlice.reducer;

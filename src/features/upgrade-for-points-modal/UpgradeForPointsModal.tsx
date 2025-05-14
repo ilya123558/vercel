@@ -13,19 +13,20 @@ interface IProps extends IUpgrade {
   setIsOpen: (isOpen: boolean) => void
 }
 
-export const UpgradeForPointsModal = ({ isOpen, setIsOpen, type }: IProps) => {
-  const { pumpingPoints } = useAppSelector(state => state.main.meta)
+export const UpgradeForPointsModal = ({ isOpen, setIsOpen, ...props }: IProps) => {
+  const { points } = useAppSelector(state => state.main.meta)
   const [value, setValue] = useState(1)
 
   const [buyUpgrade, { data, isSuccess, isError }] = useBuyUpgradeMutation()
   const {handleNotification} = useNotification()
 
   const handleClick = () => {
-    if(0 >= value || value > pumpingPoints || typeof value !== 'number' || isNaN(value)) {
+    if(0 >= value || value > points || typeof value !== 'number' || isNaN(value)) {
       handleNotification('upgrade incorrect')
       return
     }
-    buyUpgrade({upgrade_type: type})
+
+    buyUpgrade({upgradeId: props.upgradeId, points: value})
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +57,7 @@ export const UpgradeForPointsModal = ({ isOpen, setIsOpen, type }: IProps) => {
     <ModalContentWrapper
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      title={`Прокачка ${type === UpgradeType.WINSTREAK ? 'Winstreak Bonus': 'Energy Recovery'}`}
+      title={`Прокачка ${props.upgradeId === 'winstreak' ? 'Winstreak Bonus': 'Energy Recovery'}`}
       imageComponent={(
         <div className="w-full p-[6.4vw_5.61vw_5.34vw] flex justify-between">
           <div className="w-[40%]">
@@ -65,7 +66,7 @@ export const UpgradeForPointsModal = ({ isOpen, setIsOpen, type }: IProps) => {
           </div>
           <div className="w-[55%]">
             <p className="fs-12 font-medium text-white opacity-50 mb-[1.34vw]">Доступно</p>
-            <Input value={pumpingPoints} onChange={() => {}}/>
+            <Input value={points} onChange={() => {}}/>
           </div>
         </div>
       )}

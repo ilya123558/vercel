@@ -5,7 +5,7 @@ import { CustomizationType } from "@/entities/general/types/general";
 import { useNotification } from "@/shared/hooks/useNotification";
 import { ModalContentWrapper } from "@/shared/ui/wrappers/modal-content-wrapper/ModalContentWrapper";
 import { useEffect } from "react";
-import { setUser, setUserBackground, useAppDispatch } from "@/views/store";
+import { setUserBackground, useAppDispatch } from "@/views/store";
 
 interface IProps extends ICustomization {
   isOpen: boolean
@@ -34,8 +34,11 @@ export const BuyModal = ({ isOpen, setIsOpen, title, id, price, isActive, photo,
     }
     if(activateSuccess && activateData) {
       setIsOpen(false)
-      dispatch(setUserBackground(activateData.customization.photo))
       handleNotification("activeted success")
+
+      if(activateData.customization.source) {
+        dispatch(setUserBackground(activateData.customization.source))
+      }
     }
   }, [buySuccess, activateSuccess, activateData])
 

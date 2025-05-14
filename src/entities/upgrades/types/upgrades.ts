@@ -1,22 +1,33 @@
 import { IPageResponse, IStatusResponse, UpgradeType } from "@/entities/general/types/general"
 
-export interface IUpgrade {
-  type: UpgradeType
-  level: number
-  upgradeCost: number
-  winstreakBonus?: number
-  tossCountBonus?: number
-  energyRecoveryCost?: number
-}
+export type IUpgrade = {
+  upgradeId: "autobot" | "level" | "winstreak" | "recovery";
+  currentLevel: number;
+  costToNext: number;
+  totalPoints: number;
+  upgradeBonus: number;
+  pointsInvested: number;
+  requiredPoints: number;
+};
 
 export interface IGetUpgradesResponse extends IPageResponse {
-  upgrades: IUpgrade[]
+  autobotThrowsRemaining: number;
+  autobotPurchaseCost: number;
+  mainLevel: number;
+  mainLevelWinBonus: number
+  mainLevelTossCount: number
+  mainLevelUpgradeCost: number
+  otherUpgrades: IUpgrade[];
 }
 
 export interface IBuyUpgradeRequest {
-  upgrade_type: UpgradeType
+  upgradeId: "autobot" | "level" | "winstreak" | "recovery"
+  points: number
 }
 
 export interface IBuyUpgradeResponse extends IStatusResponse {
-  upgrade: IUpgrade
+  autobotThrowsRemaining: number;
+  autobotPurchaseCost: number;
+  mainLevel: number;
+  otherUpgrades: IUpgrade[];
 }

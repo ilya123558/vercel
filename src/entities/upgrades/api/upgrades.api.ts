@@ -1,5 +1,5 @@
 import { IPageRequest } from '@/entities/general/types/general'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { IBuyUpgradeRequest, IBuyUpgradeResponse, IGetUpgradesResponse } from '../types/upgrades'
 import { baseQueryWithRefresh } from '@/shared/libs/baseQueryWithRefreshю'
 
@@ -13,9 +13,10 @@ export const upgradesApi = createApi({
       providesTags: ['Upgrades']
     }),
     buyUpgrade: builder.mutation<IBuyUpgradeResponse, IBuyUpgradeRequest>({
-      query: ({upgrade_type}) => ({
-        url: `/upgrades/${upgrade_type}`,
-        method: 'PUT'
+      query: (body) => ({
+        url: `/upgrades/`,
+        method: 'POST',
+        body
       }),
       invalidatesTags: ['Upgrades']
     }),

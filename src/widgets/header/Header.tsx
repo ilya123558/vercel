@@ -13,7 +13,7 @@ export const Header = ({children}: PropsWithChildren) => {
   const handleClick = () => {
     localStorage.setItem("accessToken", user?.accessToken || '');
     localStorage.setItem("refreshToken", user?.refreshToken || '');
-    navigator.clipboard.writeText(JSON.stringify(user?.accessToken))
+    navigator.clipboard.writeText(JSON.stringify(user))
   }
   
   if(!user) {

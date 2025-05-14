@@ -19,7 +19,10 @@ export default function Page() {
       try {
         if (init_data) {
           const data = await new LoginApiClient().loginByInitData(init_data);
-          dispatch(setUser(data.user));
+          dispatch(setUser({
+            ...data.user, 
+            background: data.user.background ? data.user.background : "/images/home/bg.png"
+          }));
           localStorage.setItem('prev-page', '/')
           router.push('/home');
 

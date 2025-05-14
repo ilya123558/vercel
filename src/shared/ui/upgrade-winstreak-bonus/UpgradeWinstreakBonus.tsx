@@ -6,10 +6,7 @@ import { IUpgrade } from "@/entities/upgrades/types/upgrades";
 import { UpgradeForPointsModal } from "@/features/upgrade-for-points-modal/UpgradeForPointsModal";
 
 export const UpgradeWinstreakBonus = (props: IUpgrade) => {
-  const nextLvlTotalPoints = 20
-  const nextLvlCurrentPoints = 15
   const [isOpen, setIsOpen] = useState(false)
-
 
   return (
     <>
@@ -24,18 +21,18 @@ export const UpgradeWinstreakBonus = (props: IUpgrade) => {
             <div className="flex justify-between items-end">
               <div className="flex items-center">
                 <p className="font-medium fs-15">Winstreak Bonus: </p>
-                <p className="font-medium fs-15 ml-[4px] text-violet">{props.level}</p>
+                <p className="font-medium fs-15 ml-[4px] text-violet">{props.currentLevel}</p>
               </div>
               <div className="flex items-center">
-                <p className="font-medium fs-10">{nextLvlTotalPoints - nextLvlCurrentPoints} points. до</p>
-                <p className="font-medium fs-10 ml-[4px] text-violet">{props.level + 1} lvl</p>
+                <p className="font-medium fs-10">{props.requiredPoints} points. до</p>
+                <p className="font-medium fs-10 ml-[4px] text-violet">{props.currentLevel + 1} lvl</p>
               </div>
             </div>
             <div className="mt-[2.67vw] w-full h-[4px] bg-[#ffffff49] rounded-[3px]">
               <div 
                 style={{
                   backgroundImage: 'linear-gradient(90deg, #6F4AE7 0%, #A34AE7 100%)',
-                  width: `${(100 / nextLvlTotalPoints) * nextLvlCurrentPoints}%`
+                  width: `${(100 / props.totalPoints) * props.pointsInvested}%`
                 }} 
                 className="h-full rounded-[3px] transition-all"
               ></div>
@@ -44,12 +41,7 @@ export const UpgradeWinstreakBonus = (props: IUpgrade) => {
 
           <div className="flex items-center mb-[2.4vw]">
             <p className="font-medium fs-15">Бонус за победу:</p>
-            <p className="font-medium fs-15 ml-[4px] text-violet">+{props.winstreakBonus || 0}</p>
-          </div>
-
-          <div className="flex items-center mb-[2.4vw]">
-            <p className="font-medium fs-15">Броски:</p>
-            <p className="font-medium fs-15 ml-[4px] text-violet">+{props.tossCountBonus || 0}</p>
+            <p className="font-medium fs-15 ml-[4px] text-violet">+{props.upgradeBonus}</p>
           </div>
         </div>
 
