@@ -82,8 +82,13 @@ const mainSlice = createSlice({
     
     setUser: (state, action: PayloadAction<IInitialState["user"]>) => {
       if(action.payload) {
-        state.autoBot.autoBotCount = action.payload.tossCount
         state.autoBot.autoBotTotalCount = action.payload.autoBotTossCount
+
+        if(action.payload.tossCount > action.payload.autoBotTossCount) {
+          state.autoBot.autoBotCount = action.payload.autoBotTossCount
+        }else{
+          state.autoBot.autoBotCount = action.payload.tossCount
+        }
       }
 
       state.user = action.payload
